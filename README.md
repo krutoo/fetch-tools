@@ -1,6 +1,12 @@
 # fetch-tools
 
-Set of utilities for JS fetch function.
+Set of utilities for JS [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) function.
+
+# Goals
+
+- do not change `fetch` behavior, just add some features
+- able to run in browser, Node.js, Deno, Bun
+- has no dependencies
 
 ## Installation
 
