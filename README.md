@@ -11,7 +11,14 @@ Set of utilities for JS [fetch](https://developer.mozilla.org/en-US/docs/Web/API
 ## Installation
 
 ```bash
+# in Node.js
 npm add @krutoo/fetch-tools
+
+# in Node.js via yarn
+yarn add @krutoo/fetch-tools
+
+# in Bun
+bun add @krutoo/fetch-tools
 ```
 
 ## Usage
