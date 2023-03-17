@@ -1,10 +1,11 @@
 {
   "name": "@krutoo/fetch-tools",
   "version": "0.0.0",
-  "description": " Set of utilities for JS fetch function ",
+  "description": " Set of utilities for JS fetch function",
   "main": "index.js",
   "scripts": {
-    "test": "tsc -p . --noEmit"
+    "type-check": "tsc -p . --noEmit",
+    "build": "rm -rf dist && tsc --project tsconfig.build.json"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/krutoo/fetch-tools#readme",
   "devDependencies": {
+    "ts-node": "^10.9.1",
     "typescript": "^5.0.2"
   }
 }
