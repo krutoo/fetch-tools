@@ -33,7 +33,7 @@ const myFetch = configureFetch(
     validateStatus(status => status >= 200 && status < 300),
 
     // log request stages (before request, after response, on catch)
-    log({ onCatch: error => console.error(error) }),
+    log({ onCatch: ({ error }) => console.error(error) }),
   ]),
 );
 
