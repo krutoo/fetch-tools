@@ -27,7 +27,7 @@ Creating fetch with some extra features.
 
 ```ts
 import { configureFetch, applyMiddleware } from '@krutoo/fetch-tools';
-import { baseURL, validateStatus, log } from '@krutoo/fetch-tools/middleware';
+import { baseURL, validateStatus, defaultHeaders, log } from '@krutoo/fetch-tools/middleware';
 
 // configure your own fetch...
 const myFetch = configureFetch(
@@ -38,6 +38,9 @@ const myFetch = configureFetch(
 
     // validate status (like in axios)
     validateStatus(status => status >= 200 && status < 300),
+
+    // add default headers
+    defaultHeaders({ 'user-agent': 'test' }),
 
     // log request stages (before request, after response, on catch)
     log({ onCatch: ({ error }) => console.error(error) }),

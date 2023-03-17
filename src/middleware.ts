@@ -31,6 +31,18 @@ export function baseURL(url: string): Middleware {
     });
 }
 
+// @todo should also handle Headers as "defaults" argument?
+export function defaultHeaders(defaults: Record<string, string>): Middleware {
+  return (config, next) =>
+    next({
+      ...config,
+      headers: {
+        ...defaults,
+        ...config.headers,
+      },
+    });
+}
+
 export function validateStatus(validate: (status: number) => boolean): Middleware {
   return async (config, next) => {
     const response = await next(config);
