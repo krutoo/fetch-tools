@@ -4,13 +4,12 @@ import { baseURL, validateStatus, log } from '../src/middleware';
 const myFetch = configureFetch(
   fetch,
   applyMiddleware([
-    baseURL('https://www.sima-land.ru/api/v3/'),
+    baseURL('https://jsonplaceholder.typicode.com/'),
     validateStatus(status => status >= 200 && status < 300),
     log({ onCatch: ({ error }) => console.error(error) }),
   ]),
 );
 
-// ...and using it like normal fetch
-myFetch('currency/')
+myFetch('posts/1')
   .then(res => res.json())
   .then(console.log);
