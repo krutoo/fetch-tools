@@ -2,7 +2,7 @@
 
 Set of utilities for JS [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) function.
 
-# Goals
+## Goals
 
 - do not change `fetch` behavior, just add some features
 - able to run in browser, Node.js, Deno, Bun
