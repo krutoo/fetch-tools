@@ -5,8 +5,8 @@ Set of utilities for JS [fetch](https://developer.mozilla.org/en-US/docs/Web/API
 ## Goals
 
 - do not change `fetch` behavior, just add some features
-- able to run in browser, Node.js, Deno, Bun
-- has no dependencies
+- ability to run in browser, Node.js, Deno, Bun
+- zero dependencies
 
 ## Installation
 
@@ -74,3 +74,8 @@ async function middleware(config, next) {
   }
 }
 ```
+
+## To do
+
+- JWT middleware
+- Cookie middleware (for server)
