@@ -53,9 +53,9 @@ myFetch('posts/1')
   .then(data => console.log(data));
 ```
 
-## Writing middleware
+## Middleware
 
-Middleware is just function.
+Middleware are just functions and you can write your own.
 
 ```ts
 async function middleware(config, next) {
