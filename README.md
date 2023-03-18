@@ -34,7 +34,7 @@ const myFetch = configureFetch(
   fetch,
   applyMiddleware([
     // add base URL (like in axios)
-    baseURL('https://www.my-api.com/'),
+    baseURL('https://jsonplaceholder.typicode.com/'),
 
     // validate status (like in axios)
     validateStatus(status => status >= 200 && status < 300),
@@ -48,9 +48,9 @@ const myFetch = configureFetch(
 );
 
 // ...and using it like normal fetch
-myFetch('users/current/')
+myFetch('posts/1')
   .then(res => res.json())
-  .then(user => console.log(user.name));
+  .then(data => console.log(data));
 ```
 
 ## Writing middleware
