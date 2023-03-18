@@ -24,7 +24,7 @@ export interface LogHandlerFactory {
 
 // @todo should also handle URL as "url" argument?
 export function baseURL(url: string): Middleware {
-  return async (config, next) =>
+  return (config, next) =>
     next({
       ...config,
       url: `${url.replace(/\/$/, '')}/${String(config.url).replace(/\/$/, '')}`,
