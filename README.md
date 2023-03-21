@@ -78,4 +78,3 @@ async function middleware(config, next) {
 ## To do
 
 - JWT middleware
-- Cookie middleware (for server)
