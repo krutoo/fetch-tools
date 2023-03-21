@@ -32,7 +32,7 @@ import { baseURL, validateStatus, defaultHeaders, log } from '@krutoo/fetch-tool
 // configure your own fetch...
 const myFetch = configureFetch(
   fetch,
-  applyMiddleware([
+  applyMiddleware(
     // add base URL (like in axios)
     baseURL('https://jsonplaceholder.typicode.com/'),
 
@@ -44,7 +44,7 @@ const myFetch = configureFetch(
 
     // log request stages (before request, after response, on catch)
     log({ onCatch: ({ error }) => console.error(error) }),
-  ]),
+  ),
 );
 
 // ...and using it like normal fetch
@@ -58,7 +58,7 @@ myFetch('posts/1')
 Middleware are just functions and you can write your own.
 
 ```ts
-async function middleware(config, next) {
+async function myMiddleware(config, next) {
   try {
     // [do something before request here]
 
@@ -73,6 +73,93 @@ async function middleware(config, next) {
     throw error;
   }
 }
+```
+
+## Builtin middleware
+
+### `baseURL`
+
+Returns a middleware that will concatenate url with base url part from parameter.
+
+```ts
+import { configureFetch, applyMiddleware } from '@krutoo/fetch-tools';
+import { baseURL } from '@krutoo/fetch-tools/middleware';
+
+const myFetch = configureFetch(
+  fetch,
+  applyMiddleware(baseURL('https://jsonplaceholder.typicode.com/')),
+);
+```
+
+### `validateStatus`
+
+Returns a middleware that will validate status.
+
+```ts
+import { configureFetch, applyMiddleware } from '@krutoo/fetch-tools';
+import { validateStatus } from '@krutoo/fetch-tools/middleware';
+
+const myFetch = configureFetch(
+  fetch,
+  applyMiddleware(validateStatus(status => status >= 200 && status < 300)),
+);
+```
+
+### `defaultHeaders`
+
+Returns a middleware that will set default headers to request.
+
+```ts
+import { configureFetch, applyMiddleware } from '@krutoo/fetch-tools';
+import { defaultHeaders } from '@krutoo/fetch-tools/middleware';
+
+const myFetch = configureFetch(fetch, applyMiddleware(defaultHeaders({ 'user-agent': 'spy' })));
+```
+
+### `log`
+
+Returns a middleware that will log phases by handler.
+
+```ts
+import { configureFetch, applyMiddleware } from '@krutoo/fetch-tools';
+import { log } from '@krutoo/fetch-tools/middleware';
+
+const myFetch = configureFetch(
+  fetch,
+  log({
+    beforeRequest({ config }) {
+      console.log(config);
+    },
+
+    afterResponse({ config, response }) {
+      console.log(response);
+    },
+
+    onCatch({ config, error }) {
+      console.error(error);
+    },
+  }),
+);
+```
+
+### `cookie`
+
+Returns a middleware that will accumulate cookies. Useful on the server.
+
+```ts
+import { configureFetch, applyMiddleware, createCookieStore } from '@krutoo/fetch-tools';
+import { cookie } from '@krutoo/fetch-tools/middleware';
+
+const store = createCookieStore();
+
+const fetch1 = configureFetch(fetch, applyMiddleware(cookie(store)));
+const fetch2 = configureFetch(fetch, applyMiddleware(cookie(store)));
+
+await fetch1('https://www.hello.com/');
+await fetch2('https://www.world.com/');
+
+// there will be cookies from all responses
+console.log(store.getCookies());
 ```
 
 ## To do

@@ -20,7 +20,7 @@ export function configureFetch<T extends typeof fetch>(
   return outer;
 }
 
-export function applyMiddleware(list: Middleware[]): Enhancer {
+export function applyMiddleware(...list: Middleware[]): Enhancer {
   return function enhance(fetch) {
     let result = fetch;
 

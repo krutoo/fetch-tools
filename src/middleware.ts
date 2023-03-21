@@ -23,7 +23,7 @@ export interface LogHandlerFactory {
 }
 
 /**
- * Returns a middleware that will concat url with base url part from parameter.
+ * Returns a middleware that will concatenate url with base url part from parameter.
  * @todo should also handle URL as "url" argument?
  * @param url Base URL.
  * @return Middleware.
