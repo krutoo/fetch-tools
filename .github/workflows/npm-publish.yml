@@ -2,7 +2,7 @@ name: Node.js Package
 
 on:
   release:
-    types: [created]
+    types: [published]
 
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
       - run: npm ci
       - run: npm run type-check
       - run: npm run build
-      - run: npm --no-git-tag-version version ${{ github.event.release.name }}
+      - run: npm --no-git-tag-version version ${{ github.event.release.tag_name }}
 
   publish-npm:
     needs: build
