@@ -13,3 +13,8 @@ export interface Enhancer {
 export interface Middleware {
   (config: RequestConfig, next: RequestFunction): Promise<Response>;
 }
+
+export interface CookieStore {
+  getCookies(): string;
+  setCookie(cookie: string): void;
+}
