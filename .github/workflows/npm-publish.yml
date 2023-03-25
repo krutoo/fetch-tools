@@ -1,24 +1,11 @@
-name: Node.js Package
+name: Publish NPM package
 
 on:
   release:
     types: [published]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - run: npm ci
-      - run: npm run type-check
-      - run: npm run build
-      - run: npm --no-git-tag-version version ${{ github.event.release.tag_name }}
-
   publish-npm:
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -26,7 +13,21 @@ jobs:
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
-      - run: npm ci
-      - run: npm publish
+
+      - name: Dependencies
+        run: |
+          npm ci
+
+      - name: Lint
+        run: |
+          npm run type-check
+
+      - name: Build
+        run: |
+          npm --no-git-tag-version version ${{ github.event.release.tag_name }}
+          npm run build
+
+      - name: Publish
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
