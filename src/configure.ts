@@ -3,12 +3,12 @@ import { Enhancer, Middleware, RequestConfig } from './types';
 // @todo need to get isomorphic fetch interface
 // @todo return type should be typeof fetch extended by enhancer (need update enhance mechanism)
 export function configureFetch<T extends typeof fetch>(
-  implementation: T,
+  fetchFn: T,
   enhance?: Enhancer,
 ): typeof fetch {
   let inner = (config: RequestConfig): Promise<Response> => {
     const { url, ...init } = config;
-    return implementation(url, init);
+    return fetchFn(url, init);
   };
 
   if (enhance) {
