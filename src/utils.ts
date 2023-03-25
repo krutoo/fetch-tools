@@ -1,5 +1,10 @@
 import type { CookieStore } from './types';
 
+/**
+ * Returns new cookie store.
+ * @param initialCookies Initial cookies string.
+ * @returns Cookie store.
+ */
 export function createCookieStore(initialCookies?: string): CookieStore {
   const items: Map<string, string> = new Map();
 

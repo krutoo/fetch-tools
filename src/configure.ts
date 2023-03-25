@@ -1,7 +1,13 @@
 import { Enhancer, Middleware, RequestConfig } from './types';
 
-// @todo need to get isomorphic fetch interface
-// @todo return type should be typeof fetch extended by enhancer (need update enhance mechanism)
+/**
+ * Enhance fetch function by provided enhancer.
+ * @param fetchFn Fetch function.
+ * @param enhance Enhancer.
+ * @return Enhanced fetch function.
+ * @todo Need to get isomorphic fetch interface.
+ * @todo Result type should be typeof fetch extended by enhancer (need update enhance mechanism).
+ */
 export function configureFetch<T extends typeof fetch>(
   fetchFn: T,
   enhance?: Enhancer,
@@ -20,6 +26,11 @@ export function configureFetch<T extends typeof fetch>(
   return outer;
 }
 
+/**
+ * Creates enhancer that applies middleware to fetch.
+ * @param list Middleware list.
+ * @returns Enhancer.
+ */
 export function applyMiddleware(...list: Middleware[]): Enhancer {
   return function enhance(fetch) {
     let result = fetch;
@@ -33,6 +44,12 @@ export function applyMiddleware(...list: Middleware[]): Enhancer {
   };
 }
 
+/**
+ * Transforms parameters for fetch to request configuration.
+ * @param input Input parameter of fetch function.
+ * @param init Init parameter of fetch function.
+ * @returns Request configuration.
+ */
 function toConfig<T extends typeof fetch>(
   input: Parameters<T>[0],
   init?: Parameters<T>[1],

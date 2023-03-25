@@ -1,23 +1,28 @@
 import type { RequestConfig, Middleware, CookieStore } from './types';
 
+/** Basic data for log handler. */
 export interface LogData {
   config: RequestConfig;
 }
 
+/** Successful response data. */
 export interface DoneLogData extends LogData {
   response: Response;
 }
 
+/** Request failure data. */
 export interface FailLogData extends LogData {
   error: unknown;
 }
 
+/** Log handler. */
 export interface LogHandler {
   beforeRequest?(data: LogData): Promise<void> | void;
   afterResponse?(data: DoneLogData): Promise<void> | void;
   onCatch?(data: FailLogData): Promise<void> | void;
 }
 
+/** Log handler factory. */
 export interface LogHandlerFactory {
   (data: LogData): LogHandler;
 }
