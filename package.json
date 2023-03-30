@@ -2,6 +2,10 @@
   "name": "@krutoo/fetch-tools",
   "version": "0.0.0",
   "description": " Set of utilities for JS fetch function",
+  "files": [
+    "dist",
+    "src"
+  ],
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
