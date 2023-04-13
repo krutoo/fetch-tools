@@ -1,8 +1,8 @@
-import type { RequestConfig, Middleware, CookieStore } from './types';
+import type { Middleware, CookieStore } from './types';
 
 /** Basic data for log handler. */
 export interface LogData {
-  config: RequestConfig;
+  request: Request;
 }
 
 /** Successful response data. */
@@ -28,17 +28,35 @@ export interface LogHandlerFactory {
 }
 
 /**
- * Returns a middleware that will concatenate url with base url part from parameter.
- * @todo should also handle URL as "url" argument?
+ * Returns a middleware that will concatenate url with "base" url part from parameter.
  * @param url Base URL.
  * @return Middleware.
  */
-export function baseURL(url: string): Middleware {
-  return (config, next) =>
-    next({
-      ...config,
-      url: `${url.replace(/\/$/, '')}/${String(config.url).replace(/\/$/, '')}`,
-    });
+export function baseURL(base: string | URL): Middleware {
+  return {
+    payload(input, init) {
+      if (typeof input === 'string') {
+        const readyURL = new URL(input, base);
+        return new Request(readyURL, init);
+      }
+
+      if (input instanceof URL) {
+        const readyURL = new URL(input, base);
+        return new Request(readyURL, init);
+      }
+
+      if (input instanceof Request) {
+        const readyURL = new URL(input.url, base);
+        return new Request(new Request(readyURL, input), init);
+      }
+
+      return new Request(input, init);
+    },
+
+    fetch(request, next) {
+      return next(request);
+    },
+  };
 }
 
 /**
@@ -47,16 +65,16 @@ export function baseURL(url: string): Middleware {
  * @return Middleware.
  */
 export function defaultHeaders(defaults: HeadersInit): Middleware {
-  return (config, next) => {
+  return (request, next) => {
     const headers = new Headers(defaults);
 
-    if (config.headers) {
-      new Headers(config.headers).forEach((value, key) => {
+    if (request.headers) {
+      new Headers(request.headers).forEach((value, key) => {
         headers.append(key, value);
       });
     }
 
-    return next({ ...config, headers });
+    return next(new Request(request, { headers }));
   };
 }
 
@@ -83,14 +101,14 @@ export function validateStatus(validate: (status: number) => boolean): Middlewar
  * @return Middleware.
  */
 export function log(handlerInit: LogHandler | LogHandlerFactory): Middleware {
-  return async (config, next) => {
-    const data: LogData = { config };
+  return async (request, next) => {
+    const data: LogData = { request };
     const handler = typeof handlerInit === 'function' ? handlerInit(data) : handlerInit;
 
     try {
       await handler.beforeRequest?.(data);
 
-      const response = await next(config);
+      const response = await next(request);
 
       await handler.afterResponse?.({ ...data, response });
 
@@ -111,12 +129,12 @@ export function log(handlerInit: LogHandler | LogHandlerFactory): Middleware {
  * @return Middleware.
  */
 export function cookie(store: CookieStore): Middleware {
-  return async (config, next) => {
-    const headers = new Headers(config.headers);
+  return async (request, next) => {
+    const headers = new Headers(request.headers);
 
     headers.append('cookie', store.getCookies());
 
-    const response = await next({ ...config, headers });
+    const response = await next(new Request(request, { headers }));
 
     if (response.headers.has('set-cookie')) {
       response.headers.forEach((headerValue, headerName) => {

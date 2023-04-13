@@ -1,4 +1,4 @@
-import { Enhancer, Middleware, RequestConfig } from './types';
+import { Enhancer, Middleware } from './types';
 
 /**
  * Enhance fetch function by provided enhancer.
@@ -12,16 +12,13 @@ export function configureFetch<T extends typeof fetch>(
   fetchFn: T,
   enhance?: Enhancer,
 ): typeof fetch {
-  let inner = (config: RequestConfig): Promise<Response> => {
-    const { url, ...init } = config;
-    return fetchFn(url, init);
-  };
+  let inner = (input: Parameters<T>[0], init?: Parameters<T>[1]) => fetchFn(input, init);
 
   if (enhance) {
     inner = enhance(inner);
   }
 
-  const outer = (input: Parameters<T>[0], init?: Parameters<T>[1]) => inner(toConfig(input, init));
+  const outer = (input: Parameters<T>[0], init?: Parameters<T>[1]) => inner(input, init);
 
   return outer;
 }
@@ -31,40 +28,20 @@ export function configureFetch<T extends typeof fetch>(
  * @param list Middleware list.
  * @returns Enhancer.
  */
-export function applyMiddleware(...list: Middleware[]): Enhancer {
-  return function enhance(fetch) {
-    let result = fetch;
+export function applyMiddleware(...list: Array<Middleware>): Enhancer {
+  return function enhance(requestFn) {
+    let result = requestFn;
 
     for (const item of list.reverse()) {
       const inner = result;
-      result = config => item(config, newConfig => inner(newConfig));
+
+      if (typeof item === 'function') {
+        result = (input, init) => Promise.resolve(item(new Request(input, init), inner));
+      } else {
+        result = (input, init) => Promise.resolve(item.fetch(item.payload(input, init), inner));
+      }
     }
 
     return result;
   };
-}
-
-/**
- * Transforms parameters for fetch to request configuration.
- * @param input Input parameter of fetch function.
- * @param init Init parameter of fetch function.
- * @returns Request configuration.
- */
-function toConfig<T extends typeof fetch>(
-  input: Parameters<T>[0],
-  init?: Parameters<T>[1],
-): RequestConfig {
-  if (typeof input === 'string' || input instanceof URL) {
-    return {
-      url: String(input),
-      ...init,
-    };
-  } else if (input instanceof Request) {
-    return {
-      url: input.url,
-      ...init,
-    };
-  } else {
-    return { url: '', ...init };
-  }
 }

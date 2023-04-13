@@ -58,11 +58,11 @@ myFetch('posts/1')
 Middleware are just functions and you can write your own.
 
 ```ts
-async function myMiddleware(config, next) {
+async function myMiddleware(request, next) {
   try {
     // [do something before request here]
 
-    const response = await next(config);
+    const response = await next(request);
 
     // [do something after response here]
 
@@ -165,3 +165,4 @@ console.log(store.getCookies());
 ## To do
 
 - JWT middleware
+- ability to use with Bun's `Bun.serve` and Deno's `serve` from `std/http`

@@ -1,21 +1,24 @@
-/** Arguments of fetch merged in one object. */
-export interface RequestConfig extends RequestInit {
-  url: string;
-}
-
 /** Function that perform HTTP request (wrapper for fetch). */
 export interface RequestFunction {
-  (config: RequestConfig): Promise<Response>;
+  (request: Request): Promise<Response>;
 }
 
 /** Request function enhancer. */
 export interface Enhancer {
-  (requestFn: RequestFunction): RequestFunction;
+  (fetchFn: typeof fetch): typeof fetch;
 }
 
-/** HTTP Request process middleware. */
-export interface Middleware {
-  (config: RequestConfig, next: RequestFunction): Promise<Response>;
+/** HTTP Request process middleware as function. */
+export type Middleware = MiddlewareFunction | MiddlewareObject;
+
+export interface MiddlewareFunction {
+  (request: Request, next: RequestFunction): Response | Promise<Response>;
+}
+
+/** HTTP Request process middleware as object. */
+export interface MiddlewareObject {
+  payload: (input: Parameters<typeof fetch>[0], init: Parameters<typeof fetch>[1]) => Request;
+  fetch: MiddlewareFunction;
 }
 
 /** Simple cookie store. */
