@@ -162,7 +162,46 @@ await fetch2('https://www.world.com/');
 console.log(store.getCookies());
 ```
 
+## Server support
+
+You can use utils for simply configure your HTTP server.
+
+In Bun:
+
+```ts
+import { router, route } from '@krutoo/fetch-tools/server';
+import { html } from '@krutoo/fetch-tools/response';
+
+Bun.serve({
+  port: 1234,
+  fetch: router(
+    route('/', () => html('<h1>Home</h1>')),
+    route('/news', () => html('<h1>News</h1>')),
+    route('/about', () => html('<h1>About</h1>')),
+  ),
+});
+```
+
+In Deno:
+
+```ts
+import { serve } from 'https://deno.land/std@0.182.0/http/server.ts';
+
+await serve(
+  router(
+    route('/', () => html('<h1>Home</h1>')),
+    route('/news', () => html('<h1>News</h1>')),
+    route('/about', () => html('<h1>About</h1>')),
+  ),
+  { port: 1234 },
+);
+```
+
+In Node.js:
+
+> Coming soon...
+
 ## To do
 
 - JWT middleware
-- ability to use with Bun's `Bun.serve` and Deno's `serve` from `std/http`
+- ~~ability to use with Bun's `Bun.serve` and Deno's `serve` from `std/http`~~
