@@ -18,6 +18,18 @@
       "require": "./dist/cjs/middleware.js",
       "import": "./dist/esm/middleware.js",
       "default": "./dist/esm/middleware.js"
+    },
+    "./response": {
+      "types": "./dist/types/response.d.ts",
+      "require": "./dist/cjs/response.js",
+      "import": "./dist/esm/response.js",
+      "default": "./dist/esm/response.js"
+    },
+    "./server": {
+      "types": "./dist/types/server.d.ts",
+      "require": "./dist/cjs/server.js",
+      "import": "./dist/esm/server.js",
+      "default": "./dist/esm/server.js"
     }
   },
   "typesVersions": {
