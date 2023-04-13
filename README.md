@@ -170,14 +170,13 @@ In Bun:
 
 ```ts
 import { router, route } from '@krutoo/fetch-tools/server';
-import { html } from '@krutoo/fetch-tools/response';
 
 Bun.serve({
   port: 1234,
   fetch: router(
-    route('/', () => html('<h1>Home</h1>')),
-    route('/news', () => html('<h1>News</h1>')),
-    route('/about', () => html('<h1>About</h1>')),
+    route('/', () => new Response('Home page')),
+    route('/news', () => new Response('News page')),
+    route('/about', () => new Response('About page')),
   ),
 });
 ```
@@ -186,12 +185,13 @@ In Deno:
 
 ```ts
 import { serve } from 'https://deno.land/std@0.182.0/http/server.ts';
+import { router, route } from '@krutoo/fetch-tools/server';
 
 await serve(
   router(
-    route('/', () => html('<h1>Home</h1>')),
-    route('/news', () => html('<h1>News</h1>')),
-    route('/about', () => html('<h1>About</h1>')),
+    route('/', () => new Response('Home page')),
+    route('/news', () => new Response('News page')),
+    route('/about', () => new Response('About page')),
   ),
   { port: 1234 },
 );
