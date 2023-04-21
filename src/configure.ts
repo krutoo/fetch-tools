@@ -1,4 +1,4 @@
-import { Enhancer, Middleware } from './types';
+import { Enhancer, Middleware, RequestFunction } from './types';
 
 /**
  * Enhance fetch function by provided enhancer.
@@ -12,15 +12,13 @@ export function configureFetch<T extends typeof fetch>(
   fetchFn: T,
   enhance?: Enhancer,
 ): typeof fetch {
-  let inner = (input: Parameters<T>[0], init?: Parameters<T>[1]) => fetchFn(input, init);
+  let inner: RequestFunction = request => fetchFn(request);
 
   if (enhance) {
     inner = enhance(inner);
   }
 
-  const outer = (input: Parameters<T>[0], init?: Parameters<T>[1]) => inner(input, init);
-
-  return outer;
+  return (input, init) => Promise.resolve(inner(new Request(input, init)));
 }
 
 /**
@@ -33,13 +31,8 @@ export function applyMiddleware(...list: Array<Middleware>): Enhancer {
     let result = requestFn;
 
     for (const item of list.reverse()) {
-      const inner = result;
-
-      if (typeof item === 'function') {
-        result = (input, init) => Promise.resolve(item(new Request(input, init), inner));
-      } else {
-        result = (input, init) => Promise.resolve(item.fetch(item.payload(input, init), inner));
-      }
+      const next = result;
+      result = request => Promise.resolve(item(request, next));
     }
 
     return result;

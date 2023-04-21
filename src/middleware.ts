@@ -17,46 +17,14 @@ export interface FailLogData extends LogData {
 
 /** Log handler. */
 export interface LogHandler {
-  beforeRequest?(data: LogData): Promise<void> | void;
-  afterResponse?(data: DoneLogData): Promise<void> | void;
+  onRequest?(data: LogData): Promise<void> | void;
+  onResponse?(data: DoneLogData): Promise<void> | void;
   onCatch?(data: FailLogData): Promise<void> | void;
 }
 
 /** Log handler factory. */
 export interface LogHandlerFactory {
   (data: LogData): LogHandler;
-}
-
-/**
- * Returns a middleware that will concatenate url with "base" url part from parameter.
- * @param url Base URL.
- * @return Middleware.
- */
-export function baseURL(base: string | URL): Middleware {
-  return {
-    payload(input, init) {
-      if (typeof input === 'string') {
-        const readyURL = new URL(input, base);
-        return new Request(readyURL, init);
-      }
-
-      if (input instanceof URL) {
-        const readyURL = new URL(input, base);
-        return new Request(readyURL, init);
-      }
-
-      if (input instanceof Request) {
-        const readyURL = new URL(input.url, base);
-        return new Request(new Request(readyURL, input), init);
-      }
-
-      return new Request(input, init);
-    },
-
-    fetch(request, next) {
-      return next(request);
-    },
-  };
 }
 
 /**
@@ -106,11 +74,11 @@ export function log(handlerInit: LogHandler | LogHandlerFactory): Middleware {
     const handler = typeof handlerInit === 'function' ? handlerInit(data) : handlerInit;
 
     try {
-      await handler.beforeRequest?.(data);
+      await handler.onRequest?.(data);
 
       const response = await next(request);
 
-      await handler.afterResponse?.({ ...data, response });
+      await handler.onResponse?.({ ...data, response });
 
       return response;
     } catch (error) {

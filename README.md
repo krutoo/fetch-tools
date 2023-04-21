@@ -27,24 +27,23 @@ Creating fetch with some extra features.
 
 ```ts
 import { configureFetch, applyMiddleware } from '@krutoo/fetch-tools';
-import { baseURL, validateStatus, defaultHeaders, log } from '@krutoo/fetch-tools/middleware';
+import { validateStatus, defaultHeaders, log } from '@krutoo/fetch-tools/middleware';
 
 // configure your own fetch...
 const myFetch = configureFetch(
   fetch,
   applyMiddleware(
-    // add base URL (like in axios)
-    baseURL('https://jsonplaceholder.typicode.com/'),
-
     // validate status (like in axios)
-    validateStatus(status => status >= 200 && status < 300),
+    validateStatus((status) => status >= 200 && status < 300),
 
     // add default headers
-    defaultHeaders({ 'user-agent': 'test' }),
+    defaultHeaders({ "user-agent": "test" }),
 
     // log request stages (before request, after response, on catch)
-    log({ onCatch: ({ error }) => console.error(error) }),
-  ),
+    log({
+      onCatch: ({ error }) => console.error(error),
+    })
+  )
 );
 
 // ...and using it like normal fetch
@@ -76,20 +75,6 @@ async function myMiddleware(request, next) {
 ```
 
 ## Builtin middleware
-
-### `baseURL`
-
-Returns a middleware that will concatenate url with base url part from parameter.
-
-```ts
-import { configureFetch, applyMiddleware } from '@krutoo/fetch-tools';
-import { baseURL } from '@krutoo/fetch-tools/middleware';
-
-const myFetch = configureFetch(
-  fetch,
-  applyMiddleware(baseURL('https://jsonplaceholder.typicode.com/')),
-);
-```
 
 ### `validateStatus`
 
@@ -127,15 +112,15 @@ import { log } from '@krutoo/fetch-tools/middleware';
 const myFetch = configureFetch(
   fetch,
   log({
-    beforeRequest({ config }) {
-      console.log(config);
+    onRequest({ request }) {
+      console.log(request);
     },
 
-    afterResponse({ config, response }) {
+    onResponse({ request, response }) {
       console.log(response);
     },
 
-    onCatch({ config, error }) {
+    onCatch({ request, error }) {
       console.error(error);
     },
   }),
@@ -169,7 +154,7 @@ You can use utils for simply configure your HTTP server.
 In Bun:
 
 ```ts
-import { router, route } from '@krutoo/fetch-tools/server';
+import { router, route } from '@krutoo/fetch-tools';
 
 Bun.serve({
   port: 1234,
@@ -185,7 +170,7 @@ In Deno:
 
 ```ts
 import { serve } from 'https://deno.land/std@0.182.0/http/server.ts';
-import { router, route } from '@krutoo/fetch-tools/server';
+import { router, route } from '@krutoo/fetch-tools';
 
 await serve(
   router(
