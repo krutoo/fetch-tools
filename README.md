@@ -37,7 +37,9 @@ const myFetch = configureFetch(
     validateStatus(status => status >= 200 && status < 300),
 
     // add default headers
-    defaultHeaders({ 'user-agent': 'test' }),
+    defaultHeaders({
+      'user-agent': 'test',
+    }),
 
     // log request stages (before request, after response, on catch)
     log({
