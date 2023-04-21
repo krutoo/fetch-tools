@@ -34,16 +34,16 @@ const myFetch = configureFetch(
   fetch,
   applyMiddleware(
     // validate status (like in axios)
-    validateStatus((status) => status >= 200 && status < 300),
+    validateStatus(status => status >= 200 && status < 300),
 
     // add default headers
-    defaultHeaders({ "user-agent": "test" }),
+    defaultHeaders({ 'user-agent': 'test' }),
 
     // log request stages (before request, after response, on catch)
     log({
       onCatch: ({ error }) => console.error(error),
-    })
-  )
+    }),
+  ),
 );
 
 // ...and using it like normal fetch
