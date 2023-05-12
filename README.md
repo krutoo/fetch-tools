@@ -188,6 +188,32 @@ In Node.js:
 
 > Coming soon...
 
+You can use middleware for server handlers too:
+
+```ts
+import { router, route, applyMiddleware } from '@krutoo/fetch-tools';
+import { log } from '@krutoo/fetch-tools/middleware';
+
+const enhance = applyMiddleware(
+  log({
+    onCatch: ({ error }) => console.error(error),
+  }),
+);
+
+const handler = enhance(
+  router(
+    route('/', () => new Response('Home page')),
+    route('/news', () => new Response('News page')),
+    route('/about', () => new Response('About page')),
+  ),
+);
+
+Bun.serve({
+  port: 1234,
+  fetch: handler,
+});
+```
+
 ## To do
 
 - JWT middleware
