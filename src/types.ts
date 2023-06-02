@@ -1,16 +1,16 @@
-/** Function that perform HTTP request (wrapper for fetch). */
-export interface RequestFunction {
+/** Function that receives a request and must return a response. */
+export interface Handler {
   (request: Request): Response | Promise<Response>;
 }
 
-/** Request function enhancer. */
+/** Handler function enhancer. */
 export interface Enhancer {
-  (request: RequestFunction): RequestFunction;
+  (request: Handler): Handler;
 }
 
-/** HTTP Request process middleware as function. */
+/** Handle process middleware. */
 export interface Middleware {
-  (request: Request, next: RequestFunction): Response | Promise<Response>;
+  (request: Request, next: Handler): Response | Promise<Response>;
 }
 
 /** Simple cookie store. */

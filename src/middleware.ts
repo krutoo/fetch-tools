@@ -1,4 +1,5 @@
 import type { Middleware, CookieStore } from './types';
+import { StatusError } from './utils';
 
 /** Basic data for log handler. */
 export interface LogData {
@@ -56,7 +57,7 @@ export function validateStatus(validate: (status: number) => boolean): Middlewar
     const response = await next(config);
 
     if (!validate(response.status)) {
-      throw Error(`Request failed with status ${response.status}`);
+      throw new StatusError(`Request failed with status ${response.status}`);
     }
 
     return response;

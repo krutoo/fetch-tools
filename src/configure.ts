@@ -1,4 +1,4 @@
-import { Enhancer, Middleware, RequestFunction } from './types';
+import { Handler, Enhancer, Middleware } from './types';
 
 /**
  * Enhance fetch function by provided enhancer.
@@ -12,7 +12,7 @@ export function configureFetch<T extends typeof fetch>(
   fetchFn: T,
   enhance?: Enhancer,
 ): typeof fetch {
-  let inner: RequestFunction = request => fetchFn(request);
+  let inner: Handler = request => fetchFn(request);
 
   if (enhance) {
     inner = enhance(inner);
