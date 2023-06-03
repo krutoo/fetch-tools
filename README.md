@@ -134,8 +134,9 @@ const myFetch = configureFetch(
 Returns a middleware that will accumulate cookies. Useful on the server.
 
 ```ts
-import { configureFetch, applyMiddleware, createCookieStore } from '@krutoo/fetch-tools';
+import { configureFetch, applyMiddleware } from '@krutoo/fetch-tools';
 import { cookie } from '@krutoo/fetch-tools/middleware';
+import { createCookieStore } from '@krutoo/fetch-tools/utils';
 
 const store = createCookieStore();
 
@@ -149,11 +150,11 @@ await fetch2('https://www.world.com/');
 console.log(store.getCookies());
 ```
 
-## Server support
+## Server utilities
 
 You can use utils for simply configure your HTTP server.
 
-In Bun:
+**In Bun:**
 
 ```ts
 import { router, route } from '@krutoo/fetch-tools';
@@ -168,7 +169,7 @@ Bun.serve({
 });
 ```
 
-In Deno:
+**In Deno:**
 
 ```ts
 import { serve } from 'https://deno.land/std@0.182.0/http/server.ts';
@@ -184,9 +185,13 @@ await serve(
 );
 ```
 
-In Node.js:
+**In Node.js:**
 
-> Coming soon...
+Currently there is no builtin server implementation based on fetch API interfaces.
+
+Perhaps the implementation of such a server will appear as a separate package.
+
+### Middleware for servers
 
 You can use middleware for server handlers too:
 
