@@ -1,5 +1,9 @@
 import type { Middleware, CookieStore } from './types';
-import { StatusError } from './utils';
+
+/** Options for defaultHeaders middleware. */
+export interface DefaultHeadersOptions {
+  getThrowable?: (response: Response) => any;
+}
 
 /** Basic data for log handler. */
 export interface LogData {
@@ -52,12 +56,17 @@ export function defaultHeaders(defaults: HeadersInit): Middleware {
  * @param validate Validate function.
  * @return Middleware.
  */
-export function validateStatus(validate: (status: number) => boolean): Middleware {
+export function validateStatus(
+  validate: (status: number) => boolean,
+  {
+    getThrowable = response => new Error(`Request failed with status ${response.status}`),
+  }: DefaultHeadersOptions = {},
+): Middleware {
   return async (config, next) => {
     const response = await next(config);
 
     if (!validate(response.status)) {
-      throw new StatusError(`Request failed with status ${response.status}`);
+      throw getThrowable(response);
     }
 
     return response;

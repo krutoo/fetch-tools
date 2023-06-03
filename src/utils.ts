@@ -1,16 +1,5 @@
 import type { CookieStore } from './types';
 
-export class StatusError extends Error {
-  static is(value: unknown): value is StatusError {
-    return value instanceof StatusError;
-  }
-
-  constructor(message: string) {
-    super(message);
-    this.name = 'StatusError';
-  }
-}
-
 /**
  * Returns new cookie store.
  * @param initialCookies Initial cookies string.
