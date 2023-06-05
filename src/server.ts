@@ -1,6 +1,5 @@
+import { Handler } from './types';
 import { notFound } from './response';
-
-export type Handler = (request: Request) => Response | Promise<Response>;
 
 interface Route {
   is(url: URL): boolean;
