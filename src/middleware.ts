@@ -57,15 +57,15 @@ export function defaultHeaders(defaults: HeadersInit): Middleware {
  * @return Middleware.
  */
 export function validateStatus(
-  validate: (status: number) => boolean,
+  validate: (status: number, request: Request, response: Response) => boolean,
   {
     getThrowable = response => new Error(`Request failed with status ${response.status}`),
   }: DefaultHeadersOptions = {},
 ): Middleware {
-  return async (config, next) => {
-    const response = await next(config);
+  return async (request, next) => {
+    const response = await next(request);
 
-    if (!validate(response.status)) {
+    if (!validate(response.status, request, response)) {
       throw getThrowable(response);
     }
 
