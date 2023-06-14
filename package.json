@@ -1,7 +1,7 @@
 {
   "name": "@krutoo/fetch-tools",
   "version": "0.0.0",
-  "description": " Set of utilities for JS fetch function",
+  "description": "Set of utilities for JS fetch function",
   "files": [
     "dist",
     "src"
@@ -9,24 +9,28 @@
   "exports": {
     ".": {
       "types": "./dist/types/index.d.ts",
+      "node": "./dist/cjs/index.js",
       "require": "./dist/cjs/index.js",
       "import": "./dist/esm/index.js",
       "default": "./dist/esm/index.js"
     },
     "./middleware": {
       "types": "./dist/types/middleware.d.ts",
+      "node": "./dist/cjs/middleware.js",
       "require": "./dist/cjs/middleware.js",
       "import": "./dist/esm/middleware.js",
       "default": "./dist/esm/middleware.js"
     },
     "./response": {
       "types": "./dist/types/response.d.ts",
+      "node": "./dist/cjs/response.js",
       "require": "./dist/cjs/response.js",
       "import": "./dist/esm/response.js",
       "default": "./dist/esm/response.js"
     },
     "./server": {
       "types": "./dist/types/server.d.ts",
+      "node": "./dist/cjs/server.js",
       "require": "./dist/cjs/server.js",
       "import": "./dist/esm/server.js",
       "default": "./dist/esm/server.js"
