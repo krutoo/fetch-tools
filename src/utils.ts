@@ -7,6 +7,7 @@ import type { CookieStore } from './types';
  */
 export function createCookieStore(initialCookies?: string): CookieStore {
   const items: Map<string, string> = new Map();
+  const listeners = new Set<VoidFunction>();
 
   const setCookie = (cookie: string) => {
     // IMPORTANT: separating cookie from its attributes
@@ -37,9 +38,14 @@ export function createCookieStore(initialCookies?: string): CookieStore {
     return list.join('; ');
   };
 
+  const subscribe = (listener: VoidFunction): VoidFunction => {
+    listeners.add(listener);
+    return () => listeners.delete(listener);
+  };
+
   if (initialCookies && initialCookies.length > 0) {
     initialCookies.split('; ').forEach(setCookie);
   }
 
-  return { setCookie, getCookies };
+  return { setCookie, getCookies, subscribe };
 }

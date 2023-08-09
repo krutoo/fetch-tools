@@ -17,4 +17,5 @@ export interface Middleware {
 export interface CookieStore {
   getCookies(): string;
   setCookie(cookie: string): void;
+  subscribe(listener: VoidFunction): VoidFunction;
 }

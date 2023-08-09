@@ -6,7 +6,7 @@ import { Handler, Enhancer, Middleware } from './types';
  * @param enhance Enhancer.
  * @return Enhanced fetch function.
  * @todo Need to get isomorphic fetch interface.
- * @todo Result type should be typeof fetch extended by enhancer (need update enhance mechanism).
+ * @todo Result type should be typeof fetch extended by enhancer? (need update enhance mechanism).
  */
 export function configureFetch<T extends typeof fetch>(
   fetchFn: T,

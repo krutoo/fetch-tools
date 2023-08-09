@@ -13,7 +13,3 @@ export function json(...[body, options]: ConstructorParameters<typeof Response>)
 
   return new Response(body, { ...options, headers });
 }
-
-export function notFound() {
-  return new Response('Not found', { status: 404 });
-}

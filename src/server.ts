@@ -1,5 +1,4 @@
 import { Handler } from './types';
-import { notFound } from './response';
 
 interface Route {
   is(url: URL): boolean;
@@ -16,7 +15,7 @@ export function router(...routes: Route[]): Handler {
       }
     }
 
-    return notFound();
+    return new Response('Not found', { status: 404 });
   };
 }
 
