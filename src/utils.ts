@@ -26,6 +26,8 @@ export function createCookieStore(initialCookies?: string): CookieStore {
     }
 
     items.set(cookieName, cookieValue);
+
+    listeners.forEach(fn => fn());
   };
 
   const getCookies = () => {
