@@ -133,6 +133,7 @@ const myFetch = configureFetch(
 
 Returns a middleware that will accumulate cookies. Useful on the server.
 
+
 ```ts
 import { configureFetch, applyMiddleware } from '@krutoo/fetch-tools';
 import { cookie } from '@krutoo/fetch-tools/middleware';
@@ -149,6 +150,14 @@ await fetch2('https://www.world.com/');
 // there will be cookies from all responses
 console.log(store.getCookies());
 ```
+
+
+
+**IMPORTANT**: this middleware makes it possible to accumulate all received cookies. 
+It does not filter cookies in outgoing requests based on the URL. 
+To use cookies like a browser you can use [fetch-cookie](https://github.com/valeriangalliat/fetch-cookie).
+
+To use **fetch-cookie** as an middleware, follow [these](https://github.com/valeriangalliat/fetch-cookie/issues/79#issuecomment-1672188226) instructions.
 
 ## Server utilities
 
