@@ -1,14 +1,11 @@
 {
   "name": "fetch-tools-tests",
   "version": "0.0.0",
-  "description": "Tests",
   "private": true,
   "scripts": {
+    "preparing": "npm i --no-save ../krutoo-fetch-tools-0.0.0.tgz",
     "test": "npm run test:cjs && npm run test:mjs",
     "test:cjs": "node test.cjs",
     "test:mjs": "node test.mjs"
-  },
-  "dependencies": {
-    "@krutoo/fetch-tools": "file:.."
   }
 }
