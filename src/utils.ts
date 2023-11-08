@@ -14,15 +14,15 @@ export function createCookieStore(initialCookies?: string): CookieStore {
     const [cookiePart] = cookie.split('; ');
 
     if (!cookiePart) {
-      // @todo log instead throwing error
-      throw Error('Failed to parse cookie');
+      // @todo log?
+      return;
     }
 
     const [cookieName, cookieValue] = cookiePart.split('=');
 
-    if (!cookieName || !cookieValue) {
-      // @todo log instead throwing error
-      throw Error('Failed to parse cookie');
+    if (!cookieName || typeof cookieValue !== 'string') {
+      // @todo log?
+      return;
     }
 
     items.set(cookieName, cookieValue);

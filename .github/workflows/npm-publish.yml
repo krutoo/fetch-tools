@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
           registry-url: https://registry.npmjs.org/
 
       - name: Dependencies
@@ -21,6 +21,10 @@ jobs:
       - name: Lint
         run: |
           npm run type-check
+
+      - name: Test
+        run: |
+          node --require ts-node/register --test src/**/*.test.ts
 
       - name: Build
         run: |

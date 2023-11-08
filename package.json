@@ -47,8 +47,8 @@
   "scripts": {
     "type-check": "tsc -p . --noEmit",
     "build:clean": "rm -rf dist",
-    "build:esm": "babel src --config-file ./babel.config.esm.js -d dist/esm --source-maps --extensions '.ts,.tsx' && echo '{ \"type\": \"module\" }' > dist/esm/package.json",
-    "build:cjs": "babel src --config-file ./babel.config.cjs.js -d dist/cjs --source-maps --extensions '.ts,.tsx' && echo '{ \"type\": \"commonjs\" }' > dist/cjs/package.json",
+    "build:esm": "babel src --config-file ./babel.config.esm.js -d dist/esm --source-maps --extensions '.ts,.tsx' --ignore='**/__test__/**/*' && echo '{ \"type\": \"module\" }' > dist/esm/package.json",
+    "build:cjs": "babel src --config-file ./babel.config.cjs.js -d dist/cjs --source-maps --extensions '.ts,.tsx' --ignore='**/__test__/**/*' && echo '{ \"type\": \"commonjs\" }' > dist/cjs/package.json",
     "build:types": "tsc --project tsconfig.types.json",
     "build": "npm run build:clean && npm run build:esm && npm run build:cjs && npm run build:types"
   },
