@@ -133,7 +133,6 @@ const myFetch = configureFetch(
 
 Returns a middleware that will accumulate cookies. Useful on the server.
 
-
 ```ts
 import { configureFetch, applyMiddleware } from '@krutoo/fetch-tools';
 import { cookie } from '@krutoo/fetch-tools/middleware';
@@ -151,10 +150,8 @@ await fetch2('https://www.world.com/');
 console.log(store.getCookies());
 ```
 
-
-
-**IMPORTANT**: this middleware makes it possible to accumulate all received cookies. 
-It does not filter cookies in outgoing requests based on the URL. 
+**IMPORTANT**: this middleware makes it possible to accumulate all received cookies.
+It does not filter cookies in outgoing requests based on the URL.
 To use cookies like a browser you can use [fetch-cookie](https://github.com/valeriangalliat/fetch-cookie).
 
 To use **fetch-cookie** as an middleware, follow [these](https://github.com/valeriangalliat/fetch-cookie/issues/79#issuecomment-1672188226) instructions.
@@ -196,9 +193,22 @@ await serve(
 
 **In Node.js:**
 
-Currently there is no builtin server implementation based on fetch API interfaces.
+Currently there is no builtin server implementation based on fetch API.
 
-Perhaps the implementation of such a server will appear as a separate package.
+Is it possible to use adapter for `node:http` or `express` from [@whatwg-node/server](https://www.npmjs.com/package/@whatwg-node/server).
+
+```ts
+import express from 'express';
+import { createServerAdapter } from '@whatwg-node/server';
+
+const handler = createServerAdapter((request: Request) => {
+  return new Response(`Hello World!`, { status: 200 });
+});
+
+const app = express();
+
+app.get('/greeting', handler);
+```
 
 ### Middleware for servers
 

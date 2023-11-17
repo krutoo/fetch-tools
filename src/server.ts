@@ -19,9 +19,16 @@ export function router(...routes: Route[]): Handler {
   };
 }
 
-export function route(pathname: string, handler: Handler): Route {
+export function route(pattern: string | ((url: URL) => boolean), handler: Handler): Route {
+  if (typeof pattern === 'function') {
+    return {
+      is: pattern,
+      handler,
+    };
+  }
+
   return {
-    is: url => url.pathname === pathname,
+    is: url => url.pathname === pattern,
     handler,
   };
 }
