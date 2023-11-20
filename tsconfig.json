@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
-    "lib": ["DOM"],
-    "target": "ES2021",
+    "lib": ["DOM", "DOM.Iterable"],
+    "target": "ES2022",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "moduleResolution": "nodenext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "noUncheckedIndexedAccess": true
   }
 }
