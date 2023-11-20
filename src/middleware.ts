@@ -115,11 +115,17 @@ export function cookie(store: CookieStore): Middleware {
     const response = await next(new Request(request, { headers }));
 
     if (response.headers.has('set-cookie')) {
-      response.headers.forEach((headerValue, headerName) => {
-        if (headerName === 'set-cookie') {
-          store.setCookie(headerValue);
-        }
-      });
+      if (response.headers.getSetCookie as unknown) {
+        response.headers.getSetCookie().forEach(value => {
+          store.setCookie(value);
+        });
+      } else {
+        response.headers.forEach((headerValue, headerName) => {
+          if (headerName === 'set-cookie') {
+            store.setCookie(headerValue);
+          }
+        });
+      }
     }
 
     return response;
