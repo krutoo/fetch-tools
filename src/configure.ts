@@ -1,4 +1,4 @@
-import { Handler, Enhancer, Middleware } from './types';
+import type { Handler, Enhancer, Middleware } from './types';
 
 /**
  * Enhance fetch function by provided enhancer.

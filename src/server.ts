@@ -1,4 +1,4 @@
-import { Handler } from './types';
+import type { Handler } from './types';
 
 interface Route {
   is(url: URL): boolean;
