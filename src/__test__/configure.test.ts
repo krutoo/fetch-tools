@@ -37,7 +37,7 @@ describe('applyMiddleware', () => {
 
     await handler(new Request('https://fake.com/for-tests'));
 
-    assert.deepEqual(log, [
+    assert.deepStrictEqual(log, [
       // expected log
       '<foo>',
       '<bar>',

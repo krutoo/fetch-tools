@@ -1,7 +1,7 @@
 import type { Middleware, CookieStore } from './types';
 
 /** Options for defaultHeaders middleware. */
-export interface DefaultHeadersOptions {
+export interface ValidateStatusOptions {
   getThrowable?: (response: Response) => any;
 }
 
@@ -60,7 +60,7 @@ export function validateStatus(
   validate: (status: number, request: Request, response: Response) => boolean,
   {
     getThrowable = response => new Error(`Request failed with status ${response.status}`),
-  }: DefaultHeadersOptions = {},
+  }: ValidateStatusOptions = {},
 ): Middleware {
   return async (request, next) => {
     const response = await next(request);

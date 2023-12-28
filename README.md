@@ -241,4 +241,5 @@ Bun.serve({
 ## To do
 
 - JWT middleware
+- retry middleware
 - ~~ability to use with Bun's `Bun.serve` and Deno's `serve` from `std/http`~~
