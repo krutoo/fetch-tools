@@ -1,0 +1,15 @@
+{
+  "name": "fetch-tools-tests",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "preparing": "cd .. && npm run build && npm pack && cd tests && npm i --no-save ../krutoo-fetch-tools-0.0.0.tgz",
+    "test": "npm run test:cjs && npm run test:mjs && npm run test:ts",
+    "test:cjs": "node test.cjs",
+    "test:mjs": "node test.mjs",
+    "test:ts": "tsc -p . --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}

@@ -2,67 +2,25 @@
   "name": "@krutoo/fetch-tools",
   "version": "0.0.0",
   "description": "Set of utilities for JS fetch function",
-  "files": [
-    "dist",
-    "src",
-    "README.md"
-  ],
-  "exports": {
-    ".": {
-      "types": "./dist/types/index.d.ts",
-      "node": "./dist/cjs/index.js",
-      "require": "./dist/cjs/index.js",
-      "import": "./dist/esm/index.js",
-      "default": "./dist/esm/index.js"
-    },
-    "./middleware": {
-      "types": "./dist/types/middleware.d.ts",
-      "node": "./dist/cjs/middleware.js",
-      "require": "./dist/cjs/middleware.js",
-      "import": "./dist/esm/middleware.js",
-      "default": "./dist/esm/middleware.js"
-    },
-    "./response": {
-      "types": "./dist/types/response.d.ts",
-      "node": "./dist/cjs/response.js",
-      "require": "./dist/cjs/response.js",
-      "import": "./dist/esm/response.js",
-      "default": "./dist/esm/response.js"
-    },
-    "./server": {
-      "types": "./dist/types/server.d.ts",
-      "node": "./dist/cjs/server.js",
-      "require": "./dist/cjs/server.js",
-      "import": "./dist/esm/server.js",
-      "default": "./dist/esm/server.js"
-    }
-  },
-  "typesVersions": {
-    ">=4.2": {
-      "*": [
-        "dist/types/*"
-      ]
-    }
-  },
-  "scripts": {
-    "type-check": "tsc -p . --noEmit",
-    "build:clean": "rm -rf dist",
-    "build:esm": "babel src --config-file ./babel.config.esm.mjs -d dist/esm --source-maps --extensions '.ts,.tsx' --ignore='**/__test__/**/*' && echo '{ \"type\": \"module\" }' > dist/esm/package.json",
-    "build:cjs": "babel src --config-file ./babel.config.cjs.mjs -d dist/cjs --source-maps --extensions '.ts,.tsx' --ignore='**/__test__/**/*' && echo '{ \"type\": \"commonjs\" }' > dist/cjs/package.json",
-    "build:types": "tsc --project tsconfig.types.json",
-    "build": "npm run build:clean && npm run build:esm && npm run build:cjs && npm run build:types",
-    "test": "node --test --loader @swc-node/register/esm ./src/**/*.test.ts"
-  },
+  "author": "Dmitry Petrov",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/krutoo/fetch-tools#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/krutoo/fetch-tools.git"
   },
-  "author": "Dmitry Petrov",
-  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/krutoo/fetch-tools/issues"
   },
-  "homepage": "https://github.com/krutoo/fetch-tools#readme",
+  "scripts": {
+    "type-check": "tsc -p . --noEmit",
+    "build:clean": "rm -rf dist",
+    "build:esm": "babel src --config-file ./babel.config.esm.json -d dist/esm --source-maps --extensions '.ts,.tsx' --ignore='**/__test__/**/*' && echo '{ \"type\": \"module\" }' > dist/esm/package.json",
+    "build:cjs": "babel src --config-file ./babel.config.cjs.json -d dist/cjs --source-maps --extensions '.ts,.tsx' --ignore='**/__test__/**/*' && echo '{ \"type\": \"commonjs\" }' > dist/cjs/package.json",
+    "build:types": "tsc --project tsconfig.types.json",
+    "build": "npm run build:clean && npm run build:esm && npm run build:cjs && npm run build:types",
+    "test": "node --test --loader @swc-node/register/esm ./src/**/*.test.ts"
+  },
   "devDependencies": {
     "@babel/cli": "^7.23.0",
     "@babel/core": "^7.23.2",
@@ -71,7 +29,50 @@
     "@babel/preset-typescript": "^7.23.2",
     "@swc-node/register": "^1.6.8",
     "@types/node": "^20.9.3",
-    "fs-extra": "^11.1.1",
     "typescript": "^5.3.2"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js",
+      "default": "./dist/esm/index.js"
+    },
+    "./middleware": {
+      "types": "./dist/types/middleware.d.ts",
+      "require": "./dist/cjs/middleware.js",
+      "import": "./dist/esm/middleware.js",
+      "default": "./dist/esm/middleware.js"
+    },
+    "./response": {
+      "types": "./dist/types/response.d.ts",
+      "require": "./dist/cjs/response.js",
+      "import": "./dist/esm/response.js",
+      "default": "./dist/esm/response.js"
+    },
+    "./server": {
+      "types": "./dist/types/server.d.ts",
+      "require": "./dist/cjs/server.js",
+      "import": "./dist/esm/server.js",
+      "default": "./dist/esm/server.js"
+    }
+  },
+  "types": "./dist/types/index.d.ts",
+  "typesVersions": {
+    ">=4.2": {
+      "middleware": [
+        "./dist/types/middleware.d.ts"
+      ],
+      "response": [
+        "./dist/types/response.d.ts"
+      ],
+      "server": [
+        "./dist/types/server.d.ts"
+      ]
+    }
   }
 }
