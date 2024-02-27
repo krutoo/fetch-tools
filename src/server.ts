@@ -1,7 +1,7 @@
 import type { Handler } from './types';
 
 interface Route {
-  is(url: URL): boolean;
+  is(url: URL, request: Request): boolean;
   handler: Handler;
 }
 
@@ -10,7 +10,7 @@ export function router(...routes: Route[]): Handler {
     const url = new URL(request.url);
 
     for (const route of routes) {
-      if (route.is(url)) {
+      if (route.is(url, request)) {
         return route.handler(request);
       }
     }
@@ -19,7 +19,10 @@ export function router(...routes: Route[]): Handler {
   };
 }
 
-export function route(pattern: string | ((url: URL) => boolean), handler: Handler): Route {
+export function route(
+  pattern: string | ((url: URL, request: Request) => boolean),
+  handler: Handler,
+): Route {
   if (typeof pattern === 'function') {
     return {
       is: pattern,
@@ -32,3 +35,20 @@ export function route(pattern: string | ((url: URL) => boolean), handler: Handle
     handler,
   };
 }
+
+route.get = (
+  pattern: string | ((url: URL, request: Request) => boolean),
+  handler: Handler,
+): Route => {
+  if (typeof pattern === 'function') {
+    return {
+      is: pattern,
+      handler,
+    };
+  }
+
+  return {
+    is: (url, request) => request.method.toLowerCase() === 'get' && url.pathname === pattern,
+    handler,
+  };
+};
