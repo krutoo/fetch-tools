@@ -5,6 +5,8 @@ interface Route {
   handler: Handler;
 }
 
+type RoutePattern = string | ((url: URL, request: Request) => boolean);
+
 export function router(...routes: Route[]): Handler {
   return request => {
     const url = new URL(request.url);
@@ -19,10 +21,7 @@ export function router(...routes: Route[]): Handler {
   };
 }
 
-export function route(
-  pattern: string | ((url: URL, request: Request) => boolean),
-  handler: Handler,
-): Route {
+export function route(pattern: RoutePattern, handler: Handler): Route {
   if (typeof pattern === 'function') {
     return {
       is: pattern,
@@ -36,19 +35,28 @@ export function route(
   };
 }
 
-route.get = (
-  pattern: string | ((url: URL, request: Request) => boolean),
-  handler: Handler,
-): Route => {
-  if (typeof pattern === 'function') {
+route.get = createRouteFactoryForMethod('get');
+route.post = createRouteFactoryForMethod('post');
+route.put = createRouteFactoryForMethod('put');
+route.delete = createRouteFactoryForMethod('delete');
+route.head = createRouteFactoryForMethod('head');
+route.options = createRouteFactoryForMethod('options');
+route.connect = createRouteFactoryForMethod('connect');
+
+function createRouteFactoryForMethod(method: string) {
+  const isSuitableMethod = (request: Request) => request.method.toLowerCase() === method;
+
+  return (pattern: RoutePattern, handler: Handler): Route => {
+    if (typeof pattern === 'function') {
+      return {
+        is: (url, req) => isSuitableMethod(req) && pattern(url, req),
+        handler,
+      };
+    }
+
     return {
-      is: pattern,
+      is: (url, request) => isSuitableMethod(request) && url.pathname === pattern,
       handler,
     };
-  }
-
-  return {
-    is: (url, request) => request.method.toLowerCase() === 'get' && url.pathname === pattern,
-    handler,
   };
-};
+}

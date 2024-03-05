@@ -168,9 +168,17 @@ import { router, route } from '@krutoo/fetch-tools';
 Bun.serve({
   port: 1234,
   fetch: router(
-    route('/', () => new Response('Home page')),
-    route('/news', () => new Response('News page')),
-    route('/about', () => new Response('About page')),
+    // handler of GET /
+    route.get('/', () => new Response('Home page')),
+
+    // handler of PUT /about
+    route.put('/about', () => new Response('About page')),
+
+    // handler of POST /news
+    route.post('/news', () => new Response('News page')),
+
+    // handler for any method
+    route('/stats', () => new Response('Some stats')),
   ),
 });
 ```
