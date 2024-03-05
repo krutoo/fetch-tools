@@ -22,9 +22,15 @@ jobs:
         run: |
           npm run type-check
 
-      - name: Test
+      - name: Unit tests
         run: |
-          node --require ts-node/register --test src/**/*.test.ts
+          npm run test
+
+      - name: Package tests
+        working-directory: ./tests
+        run: |
+          npm run preparing
+          npm run test
 
       - name: Build
         run: |
