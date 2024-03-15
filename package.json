@@ -19,7 +19,7 @@
     "build:cjs": "babel src --config-file ./babel.config.cjs.json -d dist/cjs --source-maps --extensions '.ts,.tsx' --ignore='**/__test__/**/*' && echo '{ \"type\": \"commonjs\" }' > dist/cjs/package.json",
     "build:types": "tsc --project tsconfig.types.json",
     "build": "npm run build:clean && npm run build:esm && npm run build:cjs && npm run build:types",
-    "test": "node --test --loader @swc-node/register/esm ./src/**/*.test.ts"
+    "test": "node --test --loader @swc-node/register/esm --no-warnings=ExperimentalWarning ./src/**/*.test.ts"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.0",

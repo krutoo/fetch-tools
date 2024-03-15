@@ -199,7 +199,7 @@ await serve(
 );
 ```
 
-**In Node.js:**
+**In Node.js (node:http or express):**
 
 Currently there is no builtin server implementation based on fetch API.
 
