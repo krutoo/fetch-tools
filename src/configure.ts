@@ -27,7 +27,7 @@ export function configureFetch<T extends typeof fetch>(
  * @returns Enhancer.
  */
 export function applyMiddleware(...list: Array<Middleware>): Enhancer {
-  return function enhance(requestFn) {
+  return requestFn => {
     let result = requestFn;
 
     for (const item of list.reverse()) {
