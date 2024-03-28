@@ -1,5 +1,2 @@
-node_modules
-dist
-
-# npm pack default output
-krutoo-fetch-tools-0.0.0.tgz
+# build artifacts
+npm

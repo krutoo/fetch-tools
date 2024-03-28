@@ -1,4 +1,4 @@
-import type { Middleware } from '../types';
+import type { Middleware } from '../types.ts';
 
 /**
  * Returns a middleware that will set default headers to request.

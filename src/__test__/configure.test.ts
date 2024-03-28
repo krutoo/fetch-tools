@@ -1,10 +1,10 @@
-import assert from 'node:assert';
-import { describe, test } from 'node:test';
-import { applyMiddleware } from '../configure';
-import { Middleware } from '../types';
+import { assertEquals } from '@std/assert';
+import { describe, it } from '@std/testing/bdd';
+import { applyMiddleware } from '../configure.ts';
+import type { Middleware } from '../types.ts';
 
 describe('applyMiddleware', () => {
-  test('should apply middleware in the order in which they are passed', async () => {
+  it('should apply middleware in the order in which they are passed', async () => {
     const log: string[] = [];
 
     const foo: Middleware = async (request, next) => {
@@ -37,7 +37,7 @@ describe('applyMiddleware', () => {
 
     await handler(new Request('https://fake.com/for-tests'));
 
-    assert.deepStrictEqual(log, [
+    assertEquals(log, [
       // expected log
       '<foo>',
       '<bar>',

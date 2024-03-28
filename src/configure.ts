@@ -1,4 +1,4 @@
-import type { Handler, Enhancer, Middleware } from './types';
+import type { Handler, Enhancer, Middleware } from './types.ts';
 
 /**
  * Enhance fetch function by provided enhancer.
@@ -27,8 +27,8 @@ export function configureFetch<T extends typeof fetch>(
  * @returns Enhancer.
  */
 export function applyMiddleware(...list: Array<Middleware>): Enhancer {
-  return requestFn => {
-    let result = requestFn;
+  return handler => {
+    let result = handler;
 
     for (const item of list.reverse()) {
       const next = result;
