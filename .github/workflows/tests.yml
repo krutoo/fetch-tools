@@ -12,24 +12,15 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: denoland/setup-deno@v1
         with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: npm ci
+          deno-version: v1.x
 
       - name: Lint
         run: |
-          npm run type-check
+          deno task lint
 
       - name: Unit tests
         run: |
-          npm run test
-
-      - name: Package tests
-        working-directory: ./tests
-        run: |
-          npm run preparing
-          npm run test
+          deno test

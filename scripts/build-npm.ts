@@ -20,9 +20,9 @@ await build({
   ],
   outDir: './npm',
   shims: {
-    deno: false,
-    undici: false,
+    deno: 'dev',
   },
+  test: false,
   package: {
     name: '@krutoo/fetch-tools',
     version: Deno.args[0] ?? '0.0.0',
