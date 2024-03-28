@@ -1,7 +1,7 @@
 import { assertEquals } from '@std/assert';
 import { describe, it } from '@std/testing/bdd';
 import { applyMiddleware } from '../configure.ts';
-import { Middleware } from '../types.ts';
+import type { Middleware } from '../types.ts';
 
 describe('applyMiddleware', () => {
   it('should apply middleware in the order in which they are passed', async () => {
