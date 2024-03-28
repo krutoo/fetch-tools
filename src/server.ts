@@ -1,4 +1,4 @@
-import type { Handler } from './types';
+import type { Handler } from './types.ts';
 
 interface Route {
   is(url: URL, request: Request): boolean;

@@ -12,10 +12,3 @@ export interface Enhancer {
 export interface Middleware {
   (request: Request, next: Handler): Response | Promise<Response>;
 }
-
-/** Simple cookie store. */
-export interface CookieStore {
-  getCookies(): string;
-  setCookie(cookie: string): void;
-  subscribe(listener: VoidFunction): VoidFunction;
-}

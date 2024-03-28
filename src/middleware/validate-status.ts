@@ -1,8 +1,13 @@
-import type { Middleware } from '../types';
+import type { Middleware } from '../types.ts';
+import { dump } from '../utils/dump.ts';
 
 /** Options for defaultHeaders middleware. */
 export interface ValidateStatusOptions {
-  getThrowable?: (response: Response) => any;
+  /** Should return value that will be thrown. */
+  getThrowable?: (response: Response) => unknown;
+
+  /** When true, response.body will be dumped before throwing. */
+  needDump?: boolean;
 }
 
 /**
@@ -14,12 +19,16 @@ export function validateStatus(
   validate: (status: number, request: Request, response: Response) => boolean,
   {
     getThrowable = response => new Error(`Request failed with status ${response.status}`),
+    needDump = true,
   }: ValidateStatusOptions = {},
 ): Middleware {
   return async (request, next) => {
     const response = await next(request);
 
     if (!validate(response.status, request, response)) {
+      if (needDump) {
+        await dump(response);
+      }
       throw getThrowable(response);
     }
 
