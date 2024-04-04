@@ -141,6 +141,31 @@ const myFetch = configureFetch(
 );
 ```
 
+### `proxy`
+
+Returns simple proxy middleware. Useful for servers based on Fetch API.
+
+```ts
+import { applyMiddleware } from '@krutoo/fetch-tools';
+import { proxy } from '@krutoo/fetch-tools/middleware';
+
+const enhance = applyMiddleware(
+  proxy({
+    // pathname(s) of incoming request URL which will be proxied
+    filter: ['/api/v2/', '/api/v3/'],
+
+    // define target URL
+    target: 'https://www.my-site.com/',
+  }),
+);
+
+Deno.serve(
+  enhance(req => {
+    return new Response('<h1>Main page</h1>');
+  }),
+);
+```
+
 ## Server utilities
 
 You can use utils for simply configure your HTTP server.

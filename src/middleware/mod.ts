@@ -9,3 +9,4 @@ export {
 } from './log.ts';
 export { retry } from './retry.ts';
 export { validateStatus, type ValidateStatusOptions } from './validate-status.ts';
+export { proxy, type ProxyOptions, type ProxyRequestFilter } from './proxy.ts';
