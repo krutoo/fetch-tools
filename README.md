@@ -5,7 +5,7 @@ Set of utilities for JS [fetch](https://developer.mozilla.org/en-US/docs/Web/API
 ## Goals
 
 - do not change `fetch` behavior, just add some features
-- ability to run in browser, Node.js, Deno, Bun
+- ability to run in browser, Node.js, Deno, Bun, WinterJS (...any runtime that implements Fetch API)
 - zero dependencies
 
 ## Installation
@@ -88,7 +88,10 @@ import { validateStatus } from '@krutoo/fetch-tools/middleware';
 
 const myFetch = configureFetch(
   fetch,
-  applyMiddleware(validateStatus(status => status >= 200 && status < 300)),
+  applyMiddleware(
+    // fetch promise will be rejected when status is not valid
+    validateStatus(status => status >= 200 && status < 300),
+  ),
 );
 ```
 
@@ -100,7 +103,13 @@ Returns a middleware that will set default headers to request.
 import { configureFetch, applyMiddleware } from '@krutoo/fetch-tools';
 import { defaultHeaders } from '@krutoo/fetch-tools/middleware';
 
-const myFetch = configureFetch(fetch, applyMiddleware(defaultHeaders({ 'user-agent': 'spy' })));
+const myFetch = configureFetch(
+  fetch,
+  applyMiddleware(
+    // all requests will contain declared headers
+    defaultHeaders({ 'user-agent': 'spy' }),
+  ),
+);
 ```
 
 ### `log`
@@ -113,48 +122,49 @@ import { log } from '@krutoo/fetch-tools/middleware';
 
 const myFetch = configureFetch(
   fetch,
-  log({
-    onRequest({ request }) {
-      console.log(request);
-    },
+  applyMiddleware(
+    // each phase of request will be logged
+    log({
+      onRequest({ request }) {
+        console.log(request);
+      },
 
-    onResponse({ request, response }) {
-      console.log(response);
-    },
+      onResponse({ request, response }) {
+        console.log(response);
+      },
 
-    onCatch({ request, error }) {
-      console.error(error);
-    },
-  }),
+      onCatch({ request, error }) {
+        console.error(error);
+      },
+    }),
+  ),
 );
 ```
 
-### `cookie`
+### `proxy`
 
-Returns a middleware that will accumulate cookies. Useful on the server.
+Returns simple proxy middleware. Useful for servers based on Fetch API.
 
 ```ts
-import { configureFetch, applyMiddleware } from '@krutoo/fetch-tools';
-import { cookie } from '@krutoo/fetch-tools/middleware';
-import { createCookieStore } from '@krutoo/fetch-tools/utils';
+import { applyMiddleware } from '@krutoo/fetch-tools';
+import { proxy } from '@krutoo/fetch-tools/middleware';
 
-const store = createCookieStore();
+const enhance = applyMiddleware(
+  proxy({
+    // pathname(s) of incoming request URL which will be proxied
+    filter: ['/api/v2/', '/api/v3/'],
 
-const fetch1 = configureFetch(fetch, applyMiddleware(cookie(store)));
-const fetch2 = configureFetch(fetch, applyMiddleware(cookie(store)));
+    // define target URL
+    target: 'https://www.my-site.com/',
+  }),
+);
 
-await fetch1('https://www.hello.com/');
-await fetch2('https://www.world.com/');
-
-// there will be cookies from all responses
-console.log(store.getCookies());
+Deno.serve(
+  enhance(req => {
+    return new Response('<h1>Main page</h1>');
+  }),
+);
 ```
-
-**IMPORTANT**: this middleware makes it possible to accumulate all received cookies.
-It does not filter cookies in outgoing requests based on the URL.
-To use cookies like a browser you can use [fetch-cookie](https://github.com/valeriangalliat/fetch-cookie).
-
-To use **fetch-cookie** as an middleware, follow [these](https://github.com/valeriangalliat/fetch-cookie/issues/79#issuecomment-1672188226) instructions.
 
 ## Server utilities
 
@@ -166,7 +176,7 @@ You can use utils for simply configure your HTTP server.
 import { router, route } from '@krutoo/fetch-tools';
 
 Bun.serve({
-  port: 1234,
+  port: 8080,
   fetch: router(
     // handler of GET /
     route.get('/', () => new Response('Home page')),
@@ -195,7 +205,7 @@ await serve(
     route('/news', () => new Response('News page')),
     route('/about', () => new Response('About page')),
   ),
-  { port: 1234 },
+  { port: 8080 },
 );
 ```
 
@@ -206,16 +216,21 @@ Currently there is no builtin server implementation based on fetch API.
 Is it possible to use adapter for `node:http` or `express` from [@whatwg-node/server](https://www.npmjs.com/package/@whatwg-node/server).
 
 ```ts
-import express from 'express';
+import { router, route } from '@krutoo/fetch-tools';
 import { createServerAdapter } from '@whatwg-node/server';
+import express from 'express';
 
-const handler = createServerAdapter((request: Request) => {
-  return new Response(`Hello World!`, { status: 200 });
-});
+const handler = router(
+  route('/', () => new Response('Home page')),
+  route('/news', () => new Response('News page')),
+  route('/about', () => new Response('About page')),
+);
 
 const app = express();
 
-app.get('/greeting', handler);
+app.get('/greeting', createServerAdapter(handler));
+
+app.listen(8080);
 ```
 
 ### Middleware for servers
@@ -241,13 +256,50 @@ const handler = enhance(
 );
 
 Bun.serve({
-  port: 1234,
+  port: 8080,
   fetch: handler,
 });
+```
+
+### Working with HTTP cookie on server
+
+Cookies can be used in different ways on the server.
+
+### Browser like behavior
+
+If you want to imitate browser behavior as much as possible in terms of working with cookies, you can use `@krutoo/fetch-tools` together with `fetch-cookie`.
+
+To use **fetch-cookie** as an middleware, follow [these](https://github.com/valeriangalliat/fetch-cookie/issues/79#issuecomment-1672188226) instructions.
+
+### Microfrontends
+
+Server part of the microfrontend can make requests to some HTTP API on behalf of the user, sending his cookies in requests.
+
+In this case you can use just `defaultHeaders` middleware:
+
+```js
+import { configureFetch, applyMiddleware } from '@krutoo/fetch-tools';
+import { defaultHeaders } from '@krutoo/fetch-tools/middleware';
+
+// example of server handler
+async function handler(request: Request) {
+  const myFetch = configureFetch(
+    fetch,
+    applyMiddleware(
+      // forward cookie from incoming request to all outgoing requests
+      defaultHeaders({ cookie: request.headers.get('cookie') }),
+    ),
+  );
+
+  // this request will contain cookies from the incoming request
+  const orders = await myFetch('http://something.com/api/user/orders').then(res => res.json());
+
+  return new Response(JSON.stringify({ orders }), { 'content-type': 'application/json' });
+}
 ```
 
 ## To do
 
 - JWT middleware
-- retry middleware
+- ~~retry middleware~~
 - ~~ability to use with Bun's `Bun.serve` and Deno's `serve` from `std/http`~~
