@@ -210,9 +210,9 @@ Bun.serve({
 
 ### In Node.js (`node:http` or `express`)
 
-Currently there is no builtin server implementation based on fetch API.
+Currently there is no builtin server implementation based on Fetch API in Node.js.
 
-Is it possible to use adapter for `node:http` or `express` from [@whatwg-node/server](https://www.npmjs.com/package/@whatwg-node/server).
+It is possible to use _adapter_ for `node:http` or `express` from [@whatwg-node/server](https://www.npmjs.com/package/@whatwg-node/server).
 
 ```ts
 import { router } from '@krutoo/fetch-tools';
