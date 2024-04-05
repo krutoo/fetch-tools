@@ -170,67 +170,66 @@ Deno.serve(
 
 You can use utils for simply configure your HTTP server.
 
-**In Bun:**
+### In Deno
 
 ```ts
-import { router, route } from '@krutoo/fetch-tools';
+import { router } from '@krutoo/fetch-tools';
 
-Bun.serve({
+const handler = router
+  .builder()
+  .get('/', () => new Response('Home page'))
+  .put('/about', () => new Response('About page'))
+  .post('/news', () => new Response('News page'))
+  .all('/stats', () => new Response('Some stats'))
+  .build();
+
+await Deno.serve({
   port: 8080,
-  fetch: router(
-    // handler of GET /
-    route.get('/', () => new Response('Home page')),
-
-    // handler of PUT /about
-    route.put('/about', () => new Response('About page')),
-
-    // handler of POST /news
-    route.post('/news', () => new Response('News page')),
-
-    // handler for any method
-    route('/stats', () => new Response('Some stats')),
-  ),
+  handler: handler,
 });
 ```
 
-**In Deno:**
+### In Bun
 
 ```ts
-import { serve } from 'https://deno.land/std@0.182.0/http/server.ts';
-import { router, route } from '@krutoo/fetch-tools';
+import { router } from '@krutoo/fetch-tools';
 
-await serve(
-  router(
-    route('/', () => new Response('Home page')),
-    route('/news', () => new Response('News page')),
-    route('/about', () => new Response('About page')),
-  ),
-  { port: 8080 },
-);
+const handler = router
+  .builder()
+  .get('/', () => new Response('Home page'))
+  .put('/about', () => new Response('About page'))
+  .post('/news', () => new Response('News page'))
+  .all('/stats', () => new Response('Some stats'))
+  .build();
+
+Bun.serve({
+  port: 8080,
+  fetch: handler,
+});
 ```
 
-**In Node.js (node:http or express):**
+### In Node.js (`node:http` or `express`)
 
 Currently there is no builtin server implementation based on fetch API.
 
 Is it possible to use adapter for `node:http` or `express` from [@whatwg-node/server](https://www.npmjs.com/package/@whatwg-node/server).
 
 ```ts
-import { router, route } from '@krutoo/fetch-tools';
+import { router } from '@krutoo/fetch-tools';
+import { createServer } from 'node:http';
 import { createServerAdapter } from '@whatwg-node/server';
-import express from 'express';
 
-const handler = router(
-  route('/', () => new Response('Home page')),
-  route('/news', () => new Response('News page')),
-  route('/about', () => new Response('About page')),
-);
+const handler = router
+  .builder()
+  .get('/', () => new Response('Home page'))
+  .put('/about', () => new Response('About page'))
+  .post('/news', () => new Response('News page'))
+  .all('/stats', () => new Response('Some stats'))
+  .build();
 
-const app = express();
+const server = createServer(createServerAdapter(handler));
 
-app.get('/greeting', createServerAdapter(handler));
-
-app.listen(8080);
+server.listen(8080);
 ```
 
 ### Middleware for servers
@@ -238,7 +237,7 @@ app.listen(8080);
 You can use middleware for server handlers too:
 
 ```ts
-import { router, route, applyMiddleware } from '@krutoo/fetch-tools';
+import { router, applyMiddleware } from '@krutoo/fetch-tools';
 import { log } from '@krutoo/fetch-tools/middleware';
 
 const enhance = applyMiddleware(
@@ -247,17 +246,17 @@ const enhance = applyMiddleware(
   }),
 );
 
-const handler = enhance(
-  router(
-    route('/', () => new Response('Home page')),
-    route('/news', () => new Response('News page')),
-    route('/about', () => new Response('About page')),
-  ),
-);
+const handler = router
+  .builder()
+  .get('/', () => new Response('Home page'))
+  .put('/about', () => new Response('About page'))
+  .post('/news', () => new Response('News page'))
+  .all('/stats', () => new Response('Some stats'))
+  .build();
 
 Bun.serve({
   port: 8080,
-  fetch: handler,
+  fetch: enhance(handler), // just wrap handler to enhancer for apply middleware
 });
 ```
 

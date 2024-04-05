@@ -17,7 +17,7 @@
     "./server": "./src/server.ts"
   },
   "lint": {
-    "exclude": ["npm/"]
+    "exclude": ["npm/**/*"]
   },
   "publish": {
     "include": ["LICENSE", "README.md", "src/**/*.ts"],

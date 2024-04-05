@@ -27,6 +27,10 @@ export function configureFetch<T extends typeof fetch>(
  * @returns Enhancer.
  */
 export function applyMiddleware(...list: Array<Middleware>): Enhancer {
+  if (list.length === 0) {
+    return handler => handler;
+  }
+
   return handler => {
     let result = handler;
 
