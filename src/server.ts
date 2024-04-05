@@ -35,6 +35,7 @@ export function route(pattern: RoutePattern, handler: Handler): Route {
   };
 }
 
+route.all = route; // for express compatibility
 route.get = createRouteFactoryForMethod('get');
 route.post = createRouteFactoryForMethod('post');
 route.put = createRouteFactoryForMethod('put');
@@ -42,6 +43,7 @@ route.delete = createRouteFactoryForMethod('delete');
 route.head = createRouteFactoryForMethod('head');
 route.options = createRouteFactoryForMethod('options');
 route.connect = createRouteFactoryForMethod('connect');
+route.patch = createRouteFactoryForMethod('patch');
 
 function createRouteFactoryForMethod(method: string) {
   const isSuitableMethod = (request: Request) => request.method.toLowerCase() === method;
