@@ -5,19 +5,25 @@ export interface ProxyRequestFilter {
 }
 
 export interface ProxyOptions {
+  /** Defines which requests should be proxyed. */
   filter: string | string[] | ProxyRequestFilter;
+
+  /** Defines the target host. */
   target: string;
+
+  /** Defines how the incoming request path should change. */
+  pathRewrite?: (pathname: string) => string;
 }
 
 /**
  * Simple proxy middleware for servers based on Web Fetch API.
  * Based on good article: https://blog.r0b.io/post/creating-a-proxy-with-deno/
  */
-export function proxy({ filter, target }: ProxyOptions): Middleware {
+export function proxy({ filter, target, pathRewrite = p => p }: ProxyOptions): Middleware {
   const matches = createMatches(filter);
 
   const createRequest = (url: URL, request: Request) => {
-    const targetURL = new URL(`.${url.pathname}`, target);
+    const targetURL = new URL(`.${pathRewrite(url.pathname)}`, target);
     targetURL.search = url.search;
 
     const headers = new Headers(request.headers);
@@ -38,12 +44,7 @@ export function proxy({ filter, target }: ProxyOptions): Middleware {
       return next(request);
     }
 
-    console.log('go proxy!');
-
-    return fetch(createRequest(url, request)).then(res => {
-      console.log({ ...res.headers });
-      return res;
-    });
+    return fetch(createRequest(url, request));
   };
 }
 
