@@ -20,7 +20,7 @@
     "exclude": ["npm/**/*"]
   },
   "publish": {
-    "include": ["LICENSE", "README.md", "src/**/*.ts"],
+    "include": ["deno.json", "deno.lock", "LICENSE", "README.md", "src/**/*.ts"],
     "exclude": ["src/**/*.test.ts"]
   }
 }
