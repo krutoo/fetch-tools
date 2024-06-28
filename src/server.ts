@@ -7,8 +7,29 @@ interface Route {
 
 type RoutePattern = string | ((url: URL, request: Request) => boolean);
 
-export function router(...routes: Route[]): Handler {
-  return request => {
+interface RouteFactory {
+  (pattern: RoutePattern, handler: Handler): Route;
+}
+
+interface RouterAPI {
+  (...routes: Route[]): Handler;
+  builder: () => HandlerBuilder;
+}
+
+interface RouteAPI extends RouteFactory {
+  all: RouteFactory;
+  get: RouteFactory;
+  post: RouteFactory;
+  put: RouteFactory;
+  delete: RouteFactory;
+  head: RouteFactory;
+  options: RouteFactory;
+  connect: RouteFactory;
+  patch: RouteFactory;
+}
+
+export const router: RouterAPI = (...routes: Route[]): Handler => {
+  return (request) => {
     const url = new URL(request.url);
 
     for (const route of routes) {
@@ -19,11 +40,11 @@ export function router(...routes: Route[]): Handler {
 
     return new Response('Not found', { status: 404 });
   };
-}
+};
 
 router.builder = builder;
 
-export function route(pattern: RoutePattern, handler: Handler): Route {
+export const route: RouteAPI = (pattern: RoutePattern, handler: Handler): Route => {
   if (typeof pattern === 'function') {
     return {
       matches: pattern,
@@ -32,12 +53,12 @@ export function route(pattern: RoutePattern, handler: Handler): Route {
   }
 
   return {
-    matches: url => url.pathname === pattern,
+    matches: (url) => url.pathname === pattern,
     handler,
   };
-}
+};
 
-route.all = route; // for express compatibility
+route.all = (...args) => route(...args); // for express compatibility
 route.get = createRouteFactoryForMethod('get');
 route.post = createRouteFactoryForMethod('post');
 route.put = createRouteFactoryForMethod('put');
@@ -47,7 +68,7 @@ route.options = createRouteFactoryForMethod('options');
 route.connect = createRouteFactoryForMethod('connect');
 route.patch = createRouteFactoryForMethod('patch');
 
-function createRouteFactoryForMethod(method: string) {
+function createRouteFactoryForMethod(method: string): RouteFactory {
   const isSuitableMethod = (request: Request) => request.method.toLowerCase() === method;
 
   return (pattern: RoutePattern, handler: Handler): Route => {
