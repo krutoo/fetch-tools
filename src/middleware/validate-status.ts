@@ -18,7 +18,7 @@ export interface ValidateStatusOptions {
 export function validateStatus(
   validate: (status: number, request: Request, response: Response) => boolean,
   {
-    getThrowable = response => new Error(`Request failed with status ${response.status}`),
+    getThrowable = (response) => new Error(`Request failed with status ${response.status}`),
     needDump = true,
   }: ValidateStatusOptions = {},
 ): Middleware {

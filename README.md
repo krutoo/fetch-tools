@@ -1,6 +1,7 @@
 # Fetch tools
 
-Set of utilities for JS [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) function.
+Set of utilities for JS
+[fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) function.
 
 ## Goals
 
@@ -26,21 +27,19 @@ bun add @krutoo/fetch-tools
 Creating fetch with some extra features.
 
 ```ts
-import { configureFetch, applyMiddleware } from '@krutoo/fetch-tools';
-import { validateStatus, defaultHeaders, log } from '@krutoo/fetch-tools/middleware';
+import { applyMiddleware, configureFetch } from '@krutoo/fetch-tools';
+import { defaultHeaders, log, validateStatus } from '@krutoo/fetch-tools/middleware';
 
 // configure your own fetch...
 const myFetch = configureFetch(
   fetch,
   applyMiddleware(
     // validate status (like in axios)
-    validateStatus(status => status >= 200 && status < 300),
-
+    validateStatus((status) => status >= 200 && status < 300),
     // add default headers
     defaultHeaders({
       'user-agent': 'test',
     }),
-
     // log request stages (before request, after response, on catch)
     log({
       onCatch: ({ error }) => console.error(error),
@@ -50,8 +49,8 @@ const myFetch = configureFetch(
 
 // ...and using it like normal fetch
 myFetch('posts/1')
-  .then(res => res.json())
-  .then(data => console.log(data));
+  .then((res) => res.json())
+  .then((data) => console.log(data));
 ```
 
 ## Middleware
@@ -83,14 +82,14 @@ async function myMiddleware(request, next) {
 Returns a middleware that will validate status.
 
 ```ts
-import { configureFetch, applyMiddleware } from '@krutoo/fetch-tools';
+import { applyMiddleware, configureFetch } from '@krutoo/fetch-tools';
 import { validateStatus } from '@krutoo/fetch-tools/middleware';
 
 const myFetch = configureFetch(
   fetch,
   applyMiddleware(
     // fetch promise will be rejected when status is not valid
-    validateStatus(status => status >= 200 && status < 300),
+    validateStatus((status) => status >= 200 && status < 300),
   ),
 );
 ```
@@ -100,7 +99,7 @@ const myFetch = configureFetch(
 Returns a middleware that will set default headers to request.
 
 ```ts
-import { configureFetch, applyMiddleware } from '@krutoo/fetch-tools';
+import { applyMiddleware, configureFetch } from '@krutoo/fetch-tools';
 import { defaultHeaders } from '@krutoo/fetch-tools/middleware';
 
 const myFetch = configureFetch(
@@ -117,7 +116,7 @@ const myFetch = configureFetch(
 Returns a middleware that will log phases by handler.
 
 ```ts
-import { configureFetch, applyMiddleware } from '@krutoo/fetch-tools';
+import { applyMiddleware, configureFetch } from '@krutoo/fetch-tools';
 import { log } from '@krutoo/fetch-tools/middleware';
 
 const myFetch = configureFetch(
@@ -160,7 +159,7 @@ const enhance = applyMiddleware(
 );
 
 Deno.serve(
-  enhance(req => {
+  enhance((req) => {
     return new Response('<h1>Main page</h1>');
   }),
 );
@@ -212,7 +211,8 @@ Bun.serve({
 
 Currently there is no builtin server implementation based on Fetch API in Node.js.
 
-It is possible to use _adapter_ for `node:http` or `express` from [@whatwg-node/server](https://www.npmjs.com/package/@whatwg-node/server).
+It is possible to use _adapter_ for `node:http` or `express` from
+[@whatwg-node/server](https://www.npmjs.com/package/@whatwg-node/server).
 
 ```ts
 import { router } from '@krutoo/fetch-tools';
@@ -237,7 +237,7 @@ server.listen(8080);
 You can use middleware for server handlers too:
 
 ```ts
-import { router, applyMiddleware } from '@krutoo/fetch-tools';
+import { applyMiddleware, router } from '@krutoo/fetch-tools';
 import { log } from '@krutoo/fetch-tools/middleware';
 
 const enhance = applyMiddleware(
@@ -266,13 +266,17 @@ Cookies can be used in different ways on the server.
 
 ### Browser like behavior
 
-If you want to imitate browser behavior as much as possible in terms of working with cookies, you can use `@krutoo/fetch-tools` together with `fetch-cookie`.
+If you want to imitate browser behavior as much as possible in terms of working with cookies, you
+can use `@krutoo/fetch-tools` together with `fetch-cookie`.
 
-To use **fetch-cookie** as an middleware, follow [these](https://github.com/valeriangalliat/fetch-cookie/issues/79#issuecomment-1672188226) instructions.
+To use **fetch-cookie** as an middleware, follow
+[these](https://github.com/valeriangalliat/fetch-cookie/issues/79#issuecomment-1672188226)
+instructions.
 
 ### Microfrontends
 
-Server part of the microfrontend can make requests to some HTTP API on behalf of the user, sending his cookies in requests.
+Server part of the microfrontend can make requests to some HTTP API on behalf of the user, sending
+his cookies in requests.
 
 In this case you can use just `defaultHeaders` middleware:
 
