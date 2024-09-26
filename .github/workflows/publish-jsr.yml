@@ -36,4 +36,4 @@ jobs:
 
       - name: Publish package
         run: |
-          npx jsr publish
+          npx jsr publish --allow-dirty
