@@ -21,13 +21,20 @@ export function defaultHeaders(
 ): Middleware {
   return (request, next) => {
     // IMPORTANT: for avoid mutate request, just create new Headers and Request here
-    const headers = new Headers(defaults);
+    const headers = new Headers(request.headers);
 
-    if (request.headers) {
-      new Headers(request.headers).forEach((value, key) => {
-        headers[strategy](key, value);
-      });
-    }
+    /*
+      Previously, there was a different approach here: headers were created based on "defaults" argument, then headers from the request were added to them.
+
+      This was done so that the "default headers" were truly default and were overridden by what was set by the developer in the request itself.
+
+      But it didn't work well because browser always had the "Content-Type" header set by default, which always overridden the option that was in the middleware factory arguments.
+
+      To fix this, default headers are now added to the request headers
+    */
+    new Headers(defaults).forEach((value, key) => {
+      headers[strategy](key, value);
+    });
 
     return next(new Request(request, { headers }));
   };
