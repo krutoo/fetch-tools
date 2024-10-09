@@ -3,7 +3,7 @@ import type { Middleware } from '../types.ts';
 /** Options of JWT middleware. */
 export interface JwtMiddlewareOptions {
   /** JWT Token. */
-  token: string | (() => string | Promise<string>);
+  token: string | (() => string | null | Promise<string | null>);
 
   /** Filter. Takes request, should return boolean. When returns false, JWT payload will not be added to request. */
   filter?: (request: Request) => boolean;
@@ -28,7 +28,11 @@ export function jwt({
     // IMPORTANT: for avoid mutate request, just create new Headers and Request here
     const headers = new Headers(request.headers);
 
-    headers.set('Authorization', `Bearer ${await getToken()}`);
+    const token = await getToken();
+
+    if (typeof token === 'string') {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
 
     return next(new Request(request, { headers }));
   };
