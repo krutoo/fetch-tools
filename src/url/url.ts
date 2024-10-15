@@ -1,9 +1,10 @@
 import type { URLSearchParamsInit } from './types.ts';
 
 /**
- * Получив параметры применит их к переданному URL.
+ * Having received the parameters will apply them to the transferred URL.
  * @param url URL.
- * @param params Параметры.
+ * @param params Parameters init - object with any property values.
+ * @return Exactly same URL object.
  */
 export function setParams(url: URL, params: URLSearchParamsInit): URL {
   for (const [paramName, paramValue] of Object.entries(params)) {
@@ -21,30 +22,37 @@ export function setParams(url: URL, params: URLSearchParamsInit): URL {
   return url;
 }
 
+/**
+ * Having received the URL will delete all the parameters and return it.
+ * @param url URL.
+ * @return Exactly same URL object.
+ */
 export function resetParams(url: URL): URL {
   url.search = '';
+
   return url;
 }
 
 /**
- * Получив URL и параметры вернет новый URL с примененными параметрами.
+ * Having received the URL and the parameters will return the new URL using the parameters.
  * @param url URL.
- * @param params Параметры.
- * @return URL.
+ * @param params Parameters.
+ * @return New URL.
  */
 export function withParams(url: string | URL, params: URLSearchParamsInit): URL {
   return setParams(new URL(url), params);
 }
 
 /**
- * Получив URL вернет его копию но без параметров.
+ * Having received the URL will return its copy but without parameters.
  * @param url URL.
- * @return URL.
+ * @return New URL.
  */
 export function withoutParams(url: string | URL): URL {
   return resetParams(new URL(url));
 }
 
+/** Utils for working with URL. */
 export const URLUtil = {
   setParams,
   resetParams,
