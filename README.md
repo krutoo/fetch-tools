@@ -140,6 +140,35 @@ const myFetch = configureFetch(
 );
 ```
 
+### `jwt`
+
+Returns simplest JWT middleware. This middleware will add `Authorization` header to each request
+that matches the condition.
+
+```ts
+import { applyMiddleware } from '@krutoo/fetch-tools';
+import { jwt } from '@krutoo/fetch-tools/middleware';
+
+const myFetch = configureFetch(
+  fetch,
+  applyMiddleware(
+    jwt({
+      // Access token
+      token: '...',
+
+      // Determines whether to add a header
+      filter: req => req.url.includes('/api/'),
+    })
+
+    // ...or like this
+    jwt({
+      // "token" can be function that should return string or null or Promise<string | null>
+      token: () => getJwtFromSomewhere(),
+    })
+  ),
+);
+```
+
 ### `proxy`
 
 Returns simple proxy middleware. Useful for servers based on Fetch API.
