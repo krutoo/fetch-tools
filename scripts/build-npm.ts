@@ -17,6 +17,10 @@ await build({
       name: './server',
       path: './src/server.ts',
     },
+    {
+      name: './url',
+      path: './src/url/mod.ts',
+    },
   ],
   outDir: './npm',
   shims: {
@@ -40,8 +44,7 @@ await build({
   compilerOptions: {
     lib: ['ES2022', 'DOM', 'DOM.Iterable'],
   },
-  async postBuild() {
-    await Deno.copyFile('README.md', './npm/README.md');
-    await Deno.copyFile('LICENSE', './npm/LICENSE');
-  },
 });
+
+await Deno.copyFile('README.md', './npm/README.md');
+await Deno.copyFile('LICENSE', './npm/LICENSE');
