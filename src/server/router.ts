@@ -1,4 +1,4 @@
-import type { Handler } from './types.ts';
+import type { Handler } from '#fetch';
 
 interface Route {
   matches(url: URL, request: Request): boolean;

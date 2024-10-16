@@ -1,4 +1,4 @@
-import type { Middleware } from '../types.ts';
+import type { Middleware } from '#fetch';
 
 /** Options of default headers middleware. */
 export interface DefaultHeadersOptions {

@@ -1,4 +1,4 @@
-import type { Middleware } from '../types.ts';
+import type { Middleware } from '#fetch';
 
 export function retry(count: number): Middleware {
   return async (request, next) => {

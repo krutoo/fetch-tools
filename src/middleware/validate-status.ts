@@ -1,5 +1,5 @@
-import type { Middleware } from '../types.ts';
-import { dump } from '../utils/dump.ts';
+import type { Middleware } from '#fetch';
+import { dump } from '#response';
 
 /** Options for defaultHeaders middleware. */
 export interface ValidateStatusOptions {
