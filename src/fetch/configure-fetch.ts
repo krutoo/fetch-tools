@@ -1,4 +1,4 @@
-import type { Enhancer, Handler, Middleware } from './types.ts';
+import type { Enhancer, Handler } from './types.ts';
 
 /**
  * Enhance fetch function by provided enhancer.
@@ -19,26 +19,4 @@ export function configureFetch<T extends typeof fetch>(
   }
 
   return (input, init) => Promise.resolve(inner(new Request(input, init)));
-}
-
-/**
- * Creates enhancer that applies middleware to fetch.
- * @param list Middleware list.
- * @returns Enhancer.
- */
-export function applyMiddleware(...list: Array<Middleware>): Enhancer {
-  if (list.length === 0) {
-    return (handler) => handler;
-  }
-
-  return (handler) => {
-    let result = handler;
-
-    for (const item of list.reverse()) {
-      const next = result;
-      result = (request) => Promise.resolve(item(request, next));
-    }
-
-    return result;
-  };
 }

@@ -1,4 +1,4 @@
-import type { Middleware } from '../types.ts';
+import type { Middleware } from '#fetch';
 
 export interface ProxyRequestFilter {
   (url: URL, request: Request): boolean;

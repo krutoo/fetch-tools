@@ -11,17 +11,18 @@ await build({
     },
     {
       name: './response',
-      path: './src/response.ts',
+      path: './src/response/mod.ts',
     },
     {
       name: './server',
-      path: './src/server.ts',
+      path: './src/server/mod.ts',
     },
     {
       name: './url',
       path: './src/url/mod.ts',
     },
   ],
+  importMap: 'deno.json',
   outDir: './npm',
   shims: {
     deno: 'dev',

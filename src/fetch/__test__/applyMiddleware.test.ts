@@ -1,6 +1,6 @@
 import { assertEquals } from '@std/assert';
 import { describe, it } from '@std/testing/bdd';
-import { applyMiddleware } from '../configure.ts';
+import { applyMiddleware } from '../apply-middleware.ts';
 import type { Middleware } from '../types.ts';
 
 describe('applyMiddleware', () => {

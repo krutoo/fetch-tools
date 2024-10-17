@@ -1,7 +1,7 @@
 # Fetch tools
 
-Set of utilities for JS
-[fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) function.
+Set of utilities for JavaScript
+[Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch).
 
 ## Goals
 
@@ -146,7 +146,7 @@ Returns simplest JWT middleware. This middleware will add `Authorization` header
 that matches the condition.
 
 ```ts
-import { applyMiddleware } from '@krutoo/fetch-tools';
+import { applyMiddleware, configureFetch } from '@krutoo/fetch-tools';
 import { jwt } from '@krutoo/fetch-tools/middleware';
 
 const myFetch = configureFetch(
@@ -201,7 +201,7 @@ You can use utils for simply configure your HTTP server.
 ### In Deno
 
 ```ts
-import { router } from '@krutoo/fetch-tools';
+import { router } from '@krutoo/fetch-tools/server';
 
 const handler = router
   .builder()
@@ -220,7 +220,7 @@ await Deno.serve({
 ### In Bun
 
 ```ts
-import { router } from '@krutoo/fetch-tools';
+import { router } from '@krutoo/fetch-tools/server';
 
 const handler = router
   .builder()
@@ -266,7 +266,8 @@ server.listen(8080);
 You can use middleware for server handlers too:
 
 ```ts
-import { applyMiddleware, router } from '@krutoo/fetch-tools';
+import { applyMiddleware } from '@krutoo/fetch-tools';
+import { router } from '@krutoo/fetch-tools/server';
 import { log } from '@krutoo/fetch-tools/middleware';
 
 const enhance = applyMiddleware(
