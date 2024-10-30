@@ -19,7 +19,7 @@ jobs:
 
       - name: Unit tests
         run: |
-          deno test
+          deno task test
 
       - uses: actions/setup-node@v3
         with:
