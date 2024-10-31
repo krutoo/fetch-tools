@@ -2,7 +2,7 @@ import type { Middleware } from '#fetch';
 import { dump } from '#response';
 
 /** Retry middleware config. */
-export interface RetryConfig {
+export interface RetryOptions {
   /** Retries count. */
   count?: number;
 
@@ -17,11 +17,12 @@ export interface RetryConfig {
  * Returns a middleware that will retry the request until either:
  * - or the retries count is exceeded;
  * - or until a successful response is received.
- * @param init Count or config.
+ * @param init Repeat count or options.
  * @returns Middleware.
+ * @todo Consider AbortSignal.
  */
 export function retry(
-  init: number | RetryConfig,
+  init: number | RetryOptions,
 ): Middleware {
   const { count = 1, whenNotOk = true, whenCatch = true } = typeof init === 'number'
     ? { count: init }
