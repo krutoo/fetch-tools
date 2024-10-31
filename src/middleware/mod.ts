@@ -9,7 +9,7 @@ export {
   type LogHandlerFactory,
 } from './log.ts';
 
-export { retry, type RetryConfig } from './retry.ts';
+export { retry, type RetryOptions } from './retry.ts';
 
 export { validateStatus, type ValidateStatusOptions } from './validate-status.ts';
 

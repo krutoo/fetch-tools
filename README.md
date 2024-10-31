@@ -157,14 +157,36 @@ const myFetch = configureFetch(
       token: '...',
 
       // Determines whether to add a header
-      filter: req => req.url.includes('/api/'),
-    })
-
+      filter: (req) => req.url.includes('/api/'),
+    }),
     // ...or like this
     jwt({
       // "token" can be function that should return string or null or Promise<string | null>
       token: () => getJwtFromSomewhere(),
-    })
+    }),
+  ),
+);
+```
+
+### `retry`
+
+Returns a middleware that will retry the request until either:
+
+- or the retries count is exceeded;
+- or until a successful response is received.
+
+```ts
+import { applyMiddleware, configureFetch } from '@krutoo/fetch-tools';
+import { retry } from '@krutoo/fetch-tools/middleware';
+
+const myFetch = configureFetch(
+  fetch,
+  applyMiddleware(
+    retry({
+      count: 5,
+      whenNotOk: true,
+      whenCatch: false,
+    }),
   ),
 );
 ```
@@ -310,8 +332,8 @@ his cookies in requests.
 
 In this case you can use just `defaultHeaders` middleware:
 
-```js
-import { configureFetch, applyMiddleware } from '@krutoo/fetch-tools';
+```ts
+import { applyMiddleware, configureFetch } from '@krutoo/fetch-tools';
 import { defaultHeaders } from '@krutoo/fetch-tools/middleware';
 
 // example of server handler
@@ -325,9 +347,13 @@ async function handler(request: Request) {
   );
 
   // this request will contain cookies from the incoming request
-  const orders = await myFetch('http://something.com/api/user/orders').then(res => res.json());
+  const orders = await myFetch('http://something.com/api/user/orders').then(
+    (res) => res.json(),
+  );
 
-  return new Response(JSON.stringify({ orders }), { 'content-type': 'application/json' });
+  return new Response(JSON.stringify({ orders }), {
+    'content-type': 'application/json',
+  });
 }
 ```
 
