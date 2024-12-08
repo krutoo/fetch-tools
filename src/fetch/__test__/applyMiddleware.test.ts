@@ -1,9 +1,9 @@
-import { it } from '@std/testing/bdd';
+import { test } from '@std/testing/bdd';
 import { expect } from '@std/expect';
 import { applyMiddleware } from '../apply-middleware.ts';
 import type { Middleware } from '../types.ts';
 
-it('should apply middleware in the order in which they are passed', async () => {
+test('should apply middleware in the order in which they are passed', async () => {
   const log: string[] = [];
 
   const foo: Middleware = async (request, next) => {

@@ -3,11 +3,13 @@ import type { Middleware } from '#fetch';
 /** Options of default headers middleware. */
 export interface DefaultHeadersOptions {
   /**
-   * How to add header to request headers.
-   * - "set" - headers will be added using "set" method
-   * - "append" - headers will be added using "append" method
+   * How to add headers to request headers.
+   * - "set" - `defaults` will be added to `request.headers` using "set" method
+   * - "append" - `defaults` will be added to `request.headers` using "append" method
+   * - "defaults-set" - `request.headers` will be added to `defaults` using "set" method
+   * - "defaults-append" - `request.headers` will be added to `defaults` using "append" method
    */
-  strategy?: 'set' | 'append';
+  strategy?: 'set' | 'append' | 'defaults-set' | 'defaults-append';
 }
 
 /**
@@ -17,24 +19,52 @@ export interface DefaultHeadersOptions {
  */
 export function defaultHeaders(
   defaults: HeadersInit,
-  { strategy = 'append' }: DefaultHeadersOptions = {},
+  { strategy = 'set' }: DefaultHeadersOptions = {},
 ): Middleware {
   return (request, next) => {
+    /**
+     * Previously, there was a different approach here:
+     * headers were created based on "defaults" argument,
+     * then headers from the request were added to them.
+     *
+     * This was done so that the "default headers" were
+     * truly default and were overridden by what was set by
+     * the developer in the request itself.
+     *
+     * But it didn't work well because browser always
+     * had the "Content-Type" header set by default,
+     * which always overridden the option that was in the
+     * middleware factory arguments.
+     *
+     * To fix this, `strategy` option is introduced.
+     */
+
     // IMPORTANT: for avoid mutate request, just create new Headers and Request here
-    const headers = new Headers(request.headers);
+    const headers = new Headers(strategy.startsWith('defaults-') ? defaults : request.headers);
 
-    /*
-      Previously, there was a different approach here: headers were created based on "defaults" argument, then headers from the request were added to them.
+    if (strategy === 'defaults-set') {
+      request.headers.forEach((value, key) => {
+        headers.set(key, value);
+      });
+    }
 
-      This was done so that the "default headers" were truly default and were overridden by what was set by the developer in the request itself.
+    if (strategy === 'defaults-append') {
+      request.headers.forEach((value, key) => {
+        headers.append(key, value);
+      });
+    }
 
-      But it didn't work well because browser always had the "Content-Type" header set by default, which always overridden the option that was in the middleware factory arguments.
+    if (strategy === 'set') {
+      new Headers(defaults).forEach((value, key) => {
+        headers.set(key, value);
+      });
+    }
 
-      To fix this, default headers are now added to the request headers
-    */
-    new Headers(defaults).forEach((value, key) => {
-      headers[strategy](key, value);
-    });
+    if (strategy === 'append') {
+      new Headers(defaults).forEach((value, key) => {
+        headers.append(key, value);
+      });
+    }
 
     return next(new Request(request, { headers }));
   };

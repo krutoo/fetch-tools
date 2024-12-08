@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, it } from '@std/testing/bdd';
+import { afterAll, beforeAll, test } from '@std/testing/bdd';
 import { expect } from '@std/expect';
 import { applyMiddleware, configureFetch } from '#fetch';
 import { retry } from '../retry.ts';
@@ -22,7 +22,7 @@ afterAll(async () => {
   await server.shutdown();
 });
 
-it('Should fetch resource until it returns success response)', async () => {
+test('Should fetch resource until it returns success response)', async () => {
   const fetch = configureFetch(globalThis.fetch, applyMiddleware(retry({ count: 10 })));
 
   expect(serverState.counter).toBe(3);
@@ -37,7 +37,7 @@ it('Should fetch resource until it returns success response)', async () => {
   await dump(response);
 });
 
-it('Should break fetch loop when attempt limit is reached', async () => {
+test('Should break fetch loop when attempt limit is reached', async () => {
   const fetch = configureFetch(globalThis.fetch, applyMiddleware(retry({ count: 2 })));
 
   serverState.counter = 5;
