@@ -10,6 +10,13 @@ export interface DefaultHeadersOptions {
    * - "defaults-append" - `request.headers` will be added to `defaults` using "append" method
    */
   strategy?: 'set' | 'append' | 'defaults-set' | 'defaults-append';
+
+  /** Determines whether or not to use default headers. */
+  when?: (request: Request) => boolean;
+}
+
+function getTrue() {
+  return true;
 }
 
 /**
@@ -19,9 +26,16 @@ export interface DefaultHeadersOptions {
  */
 export function defaultHeaders(
   defaults: HeadersInit,
-  { strategy = 'set' }: DefaultHeadersOptions = {},
+  {
+    strategy = 'set',
+    when: matches = getTrue,
+  }: DefaultHeadersOptions = {},
 ): Middleware {
   return (request, next) => {
+    if (!matches(request)) {
+      return next(request);
+    }
+
     /**
      * Previously, there was a different approach here:
      * headers were created based on "defaults" argument,
