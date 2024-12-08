@@ -7,6 +7,9 @@ export interface JwtMiddlewareOptions {
 
   /** Filter. Takes request, should return boolean. When returns false, JWT payload will not be added to request. */
   filter?: (request: Request) => boolean;
+
+  /** Allows to change default format "Bearer {accessToken}" of "Authorization" header value. */
+  format?: (token: string) => string;
 }
 
 /**
@@ -17,6 +20,7 @@ export interface JwtMiddlewareOptions {
 export function jwt({
   token,
   filter = () => true,
+  format = (tokenValue) => `Bearer ${tokenValue}`,
 }: JwtMiddlewareOptions): Middleware {
   const getToken = typeof token === 'function' ? token : () => token;
 
@@ -31,7 +35,7 @@ export function jwt({
     const token = await getToken();
 
     if (typeof token === 'string') {
-      headers.set('Authorization', `Bearer ${token}`);
+      headers.set('Authorization', format(token));
     }
 
     return next(new Request(request, { headers }));
