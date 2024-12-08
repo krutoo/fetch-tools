@@ -8,8 +8,8 @@
   },
   "imports": {
     "@deno/dnt": "jsr:@deno/dnt@^0.41.3",
-    "@std/expect": "jsr:@std/expect@^1.0.6",
-    "@std/testing": "jsr:@std/testing@^1.0.3",
+    "@std/expect": "jsr:@std/expect@^1.0.9",
+    "@std/testing": "jsr:@std/testing@^1.0.6",
     "#fetch": "./src/fetch/mod.ts",
     "#response": "./src/response/mod.ts"
   },

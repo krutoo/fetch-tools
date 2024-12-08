@@ -1,8 +1,8 @@
-import { it } from '@std/testing/bdd';
+import { test } from '@std/testing/bdd';
 import { expect } from '@std/expect';
 import { resetParams, setParams, withoutParams, withParams } from '../url.ts';
 
-it('withParams', () => {
+test('withParams', () => {
   const input = new URL('http://hello.com?foo=1&bar=2');
 
   expect(input.searchParams.get('foo')).toBe('1');
@@ -15,7 +15,7 @@ it('withParams', () => {
   expect(output.searchParams.get('baz')).toBe('4');
 });
 
-it('withoutParams', () => {
+test('withoutParams', () => {
   const input = new URL('http://hello.com?foo=1&bar=2');
 
   expect(input.searchParams.get('foo')).toBe('1');
@@ -28,7 +28,7 @@ it('withoutParams', () => {
   expect(output.searchParams.get('baz')).toBe(null);
 });
 
-it('setParams', () => {
+test('setParams', () => {
   const input = new URL('http://hello.com?foo=1&bar=2');
 
   expect(input.searchParams.get('foo')).toBe('1');
@@ -42,7 +42,7 @@ it('setParams', () => {
   expect(output.searchParams.get('baz')).toBe('4');
 });
 
-it('resetParams', () => {
+test('resetParams', () => {
   const input = new URL('http://hello.com?foo=1&bar=2');
 
   expect(input.searchParams.get('foo')).toBe('1');

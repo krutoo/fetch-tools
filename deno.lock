@@ -7,26 +7,27 @@
     "jsr:@deno/graph@~0.73.1": "0.73.1",
     "jsr:@std/assert@0.223": "0.223.0",
     "jsr:@std/assert@0.226": "0.226.0",
-    "jsr:@std/assert@^1.0.6": "1.0.6",
-    "jsr:@std/async@^1.0.5": "1.0.7",
+    "jsr:@std/assert@^1.0.9": "1.0.9",
     "jsr:@std/bytes@0.223": "0.223.0",
     "jsr:@std/data-structures@^1.0.4": "1.0.4",
-    "jsr:@std/expect@^1.0.6": "1.0.6",
+    "jsr:@std/expect@^1.0.9": "1.0.9",
     "jsr:@std/fmt@0.223": "0.223.0",
     "jsr:@std/fmt@1": "1.0.3",
     "jsr:@std/fs@0.223": "0.223.0",
-    "jsr:@std/fs@1": "1.0.5",
+    "jsr:@std/fs@1": "1.0.6",
     "jsr:@std/fs@^1.0.4": "1.0.5",
+    "jsr:@std/fs@^1.0.6": "1.0.6",
     "jsr:@std/fs@~0.229.3": "0.229.3",
-    "jsr:@std/internal@^1.0.4": "1.0.4",
+    "jsr:@std/internal@^1.0.5": "1.0.5",
     "jsr:@std/io@0.223": "0.223.0",
     "jsr:@std/path@0.223": "0.223.0",
-    "jsr:@std/path@1": "1.0.7",
+    "jsr:@std/path@1": "1.0.8",
     "jsr:@std/path@1.0.0-rc.1": "1.0.0-rc.1",
     "jsr:@std/path@^1.0.6": "1.0.7",
-    "jsr:@std/path@^1.0.7": "1.0.7",
+    "jsr:@std/path@^1.0.7": "1.0.8",
+    "jsr:@std/path@^1.0.8": "1.0.8",
     "jsr:@std/path@~0.225.2": "0.225.2",
-    "jsr:@std/testing@^1.0.3": "1.0.3",
+    "jsr:@std/testing@^1.0.6": "1.0.6",
     "jsr:@ts-morph/bootstrap@0.24": "0.24.0",
     "jsr:@ts-morph/common@0.24": "0.24.0"
   },
@@ -64,14 +65,11 @@
     "@std/assert@0.226.0": {
       "integrity": "0dfb5f7c7723c18cec118e080fec76ce15b4c31154b15ad2bd74822603ef75b3"
     },
-    "@std/assert@1.0.6": {
-      "integrity": "1904c05806a25d94fe791d6d883b685c9e2dcd60e4f9fc30f4fc5cf010c72207",
+    "@std/assert@1.0.9": {
+      "integrity": "a9f0c611a869cc791b26f523eec54c7e187aab7932c2c8e8bea0622d13680dcd",
       "dependencies": [
         "jsr:@std/internal"
       ]
-    },
-    "@std/async@1.0.7": {
-      "integrity": "f4fadc0124432e37cba11e8b3880164661a664de00a65118d976848f32f96290"
     },
     "@std/bytes@0.223.0": {
       "integrity": "84b75052cd8680942c397c2631318772b295019098f40aac5c36cead4cba51a8"
@@ -79,10 +77,10 @@
     "@std/data-structures@1.0.4": {
       "integrity": "fa0e20c11eb9ba673417450915c750a0001405a784e2a4e0c3725031681684a0"
     },
-    "@std/expect@1.0.6": {
-      "integrity": "dffba969ca5ea6d7c39338d4985c9af2bfa6e080c710cc2b77756dd7657c369c",
+    "@std/expect@1.0.9": {
+      "integrity": "108bb428f17492ac40439479e1dc55fbaae581530e905a8603f97305842a5a01",
       "dependencies": [
-        "jsr:@std/assert@^1.0.6",
+        "jsr:@std/assert@^1.0.9",
         "jsr:@std/internal"
       ]
     },
@@ -107,8 +105,14 @@
         "jsr:@std/path@^1.0.7"
       ]
     },
-    "@std/internal@1.0.4": {
-      "integrity": "62e8e4911527e5e4f307741a795c0b0a9e6958d0b3790716ae71ce085f755422"
+    "@std/fs@1.0.6": {
+      "integrity": "42b56e1e41b75583a21d5a37f6a6a27de9f510bcd36c0c85791d685ca0b85fa2",
+      "dependencies": [
+        "jsr:@std/path@^1.0.8"
+      ]
+    },
+    "@std/internal@1.0.5": {
+      "integrity": "54a546004f769c1ac9e025abd15a76b6671ddc9687e2313b67376125650dc7ba"
     },
     "@std/io@0.223.0": {
       "integrity": "2d8c3c2ab3a515619b90da2c6ff5ea7b75a94383259ef4d02116b228393f84f1",
@@ -135,15 +139,17 @@
     "@std/path@1.0.7": {
       "integrity": "76a689e07f0e15dcc6002ec39d0866797e7156629212b28f27179b8a5c3b33a1"
     },
-    "@std/testing@1.0.3": {
-      "integrity": "f98c2bee53860a5916727d7e7d3abe920dd6f9edace022e2d059f00d05c2cf42",
+    "@std/path@1.0.8": {
+      "integrity": "548fa456bb6a04d3c1a1e7477986b6cffbce95102d0bb447c67c4ee70e0364be"
+    },
+    "@std/testing@1.0.6": {
+      "integrity": "9192ded2d34065f4c959fdc1921fe836770abb9194410c2cc8a0fff4eff5c893",
       "dependencies": [
-        "jsr:@std/assert@^1.0.6",
-        "jsr:@std/async",
+        "jsr:@std/assert@^1.0.9",
         "jsr:@std/data-structures",
-        "jsr:@std/fs@^1.0.4",
+        "jsr:@std/fs@^1.0.6",
         "jsr:@std/internal",
-        "jsr:@std/path@^1.0.6"
+        "jsr:@std/path@^1.0.8"
       ]
     },
     "@ts-morph/bootstrap@0.24.0": {
@@ -163,8 +169,8 @@
   "workspace": {
     "dependencies": [
       "jsr:@deno/dnt@~0.41.3",
-      "jsr:@std/expect@^1.0.6",
-      "jsr:@std/testing@^1.0.3"
+      "jsr:@std/expect@^1.0.9",
+      "jsr:@std/testing@^1.0.6"
     ]
   }
 }
