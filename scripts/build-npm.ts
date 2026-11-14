@@ -41,6 +41,7 @@ await build({
     bugs: {
       url: 'https://github.com/krutoo/fetch-tools/issues',
     },
+    sideEffects: false,
   },
   compilerOptions: {
     lib: ['ES2022', 'DOM', 'DOM.Iterable'],
