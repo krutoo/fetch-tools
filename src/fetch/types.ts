@@ -12,3 +12,16 @@ export interface Enhancer {
 export interface Middleware {
   (request: Request, next: Handler): Response | Promise<Response>;
 }
+
+export interface ConfigureFetchOptions {
+  Request?: typeof Request;
+}
+
+/**
+ * Enhance fetch function by provided enhancer.
+ * @param fetchFn Fetch function.
+ * @param enhance Enhancer.
+ */
+export interface ConfigureFetch {
+  <T extends typeof fetch>(fetchFn: T, enhance?: Enhancer): typeof fetch;
+}
