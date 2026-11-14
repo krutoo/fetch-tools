@@ -13,8 +13,10 @@ export function applyMiddleware(...list: Array<Middleware>): Enhancer {
   return (handler) => {
     let result = handler;
 
-    for (const item of list.reverse()) {
+    for (let i = list.length - 1; i >= 0; i--) {
+      const item = list[i];
       const next = result;
+
       result = (request) => Promise.resolve(item(request, next));
     }
 
