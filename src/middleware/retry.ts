@@ -6,6 +6,9 @@ export interface RetryOptions {
   /** Retries count. */
   count?: number;
 
+  /** Timeout between tries. */
+  timeout?: number;
+
   /** Should try again if received response is not OK. */
   whenNotOk?: boolean;
 
@@ -24,7 +27,7 @@ export interface RetryOptions {
 export function retry(
   init: number | RetryOptions,
 ): Middleware {
-  const { count = 1, whenNotOk = true, whenCatch = true } = typeof init === 'number'
+  const { count = 1, whenNotOk = true, whenCatch = true, timeout = 0 } = typeof init === 'number'
     ? { count: init }
     : init;
 
@@ -33,6 +36,10 @@ export function retry(
 
     while (true) {
       index++;
+
+      if (index > 0) {
+        await new Promise((done) => setTimeout(done, timeout));
+      }
 
       try {
         const response = await next(request.clone());
